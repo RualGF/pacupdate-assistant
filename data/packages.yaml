@@ -1,0 +1,48 @@
+applications:
+
+  firefox:
+      source: mozilla
+  
+  brave-bin:
+      source: brave
+
+  thunderbird:
+      source: mozilla
+
+  steam:
+      source: steam
+
+  discord:
+      source: discord
+
+  qbittorrent:
+      source: github
+
+  libreoffice:
+      source: libreoffice
+  
+  claude-desktop:
+      source: anthropic
+  
+  zed:
+      source: zed
+
+drivers:
+
+  mesa
+
+  linux
+
+  nvidia
+
+desktop:
+
+  plasma-desktop
+
+  kwin
+
+  dolphin
+
+libraries:
+  
+  libtorrent-rasterbar
