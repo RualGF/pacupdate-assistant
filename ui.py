@@ -14,8 +14,8 @@ CATEGORY_TITLES = {
 CATEGORY_ORDER = ["applications", "drivers", "desktop", "libraries", "system"]
 
 BUMP_ICONS = {
-    VersionBump.MAJOR: "🔴",
-    VersionBump.SNAPSHOT: "🌀",
+    VersionBump.MAJOR: "🔴 ",     # se deja un espacio al final para que no quede pegado
+    VersionBump.SNAPSHOT: "🌀 ",  # el nombre del paquete
 }
 
 def display_name(pkg_name: str, aliases: dict[str, str]) -> str:
@@ -25,8 +25,13 @@ def display_name(pkg_name: str, aliases: dict[str, str]) -> str:
 def render(updates: list[PackageUpdate]) -> None:
     aliases = load_aliases()
     visible = [u for u in updates if u.visible]
+    
+     # Separamos los que piden clasificación de los que van a sus categorías normales
+    to_classify = [u for u in visible if u.needs_classification]
+    rest = [u for u in visible if not u.needs_classification]
+
     by_category: dict[str, list[PackageUpdate]] = {c: [] for c in CATEGORY_ORDER}
-    for u in visible:
+    for u in rest:
         by_category.setdefault(u.category, []).append(u)
 
     for category in CATEGORY_ORDER:
@@ -47,6 +52,18 @@ def render(updates: list[PackageUpdate]) -> None:
                 console.print(
                     f"🟡 {u.name} (pkgrel {u.old_pkgrel}→{u.new_pkgrel})"
                 )
+
+    if to_classify:
+        console.print(f"[bold]{'─' * 50}[/bold]")
+        console.print("[bold]❓ Sin clasificar[/bold]")
+        console.print(f"[bold]{'─' * 50}[/bold]")
+        for u in to_classify:
+            name = display_name(u.name, aliases)
+            marker = BUMP_ICONS.get(u.version_bump, "🆕 " if u.is_new else "🟢 ")
+            console.print(f"{marker}{name} {u.old_pkgver} → {u.new_pkgver}")
+        console.print(
+            "[dim]Añádelos a packages.yaml para clasificarlos.[/dim]"
+        )
 
     # Paquetes de sistema colapsados: solo rebuild y no conocidos ni nuevos
     hidden = [

@@ -10,9 +10,9 @@ def load_packages_map() -> dict[str, str]:
     mapping = {}
     for category, entries in raw.items():
         # soporta tanto lista simple como dict con metadata
-        items = entries.keys() if isinstance(entries, dict) else entries
-        for name in items:
-            mapping[name] = category
+        for name, meta in (entries or {}).items():
+            meta = meta or {}
+            mapping[name] = {"category": category, "show_rebuilds": meta.get("show_rebuilds", False)}
     return mapping
 
 

@@ -1,5 +1,14 @@
 import subprocess
+import re
+import os
+
 from models import PackageUpdate
+
+
+def _run_pacman(args: list[str]) -> subprocess.CompletedProcess:
+    env = os.environ.copy()
+    env["LC_ALL"] = "C"
+    return subprocess.run(args, capture_output=True, text=True, check=False, env=env)
 
 
 def run_checkupdates() -> list[str]:
@@ -38,3 +47,7 @@ def parse_checkupdates(lines: list[str]) -> list[PackageUpdate]:
             )
         )
     return updates
+
+
+
+            

@@ -1,7 +1,6 @@
 import re
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional
 
 
 class ChangeType(Enum):
@@ -52,6 +51,8 @@ class PackageUpdate:
     category: str = "system"   # "applications" | "drivers" | "desktop" | "system"
     known: bool = False        # ¿está en packages.yaml?
     is_new: bool = False       # ¿nunca visto antes en cache?
+    show_rebuilds: bool = False
+
 
     @property
     def change_type(self) -> ChangeType:
@@ -70,6 +71,7 @@ class PackageUpdate:
         """¿Se debe mostrar en el resumen, o es ruido?"""
         if self.change_type is ChangeType.VERSION:
             return True
+        # solo rebuild: se muestra si el propio paquete lo pide, o si es nuevo
         return self.known or self.is_new
     
     @property
@@ -77,3 +79,8 @@ class PackageUpdate:
         if self.change_type is not ChangeType.VERSION:
             return VersionBump.UNKNOWN
         return classify_bump(self.name, self.old_pkgver, self.new_pkgver)
+
+    @property
+    def needs_classification(self) -> bool:
+        """Cambio real de versión, desconocido, Y la primera vez que lo vemos."""
+        return not self.known and self.is_new and self.change_type is ChangeType.VERSION

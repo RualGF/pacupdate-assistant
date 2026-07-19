@@ -24,25 +24,22 @@ applications:
   claude-desktop:
       source: anthropic
   
+  vscodium:
+      source: github
+  
   zed:
       source: zed
 
 drivers:
 
-  mesa
-
-  linux
-
-  nvidia
+  nvidia: {source: nvidia}
+  linux: {source: kernel.org}
+  mesa: {source: mesa}
 
 desktop:
-
-  plasma-desktop
-
-  kwin
-
-  dolphin
+  plasma-desktop: {}
+  kwin: {}
+  dolphin: {}
 
 libraries:
-  
-  libtorrent-rasterbar
+  libtorrent-rasterbar: {}

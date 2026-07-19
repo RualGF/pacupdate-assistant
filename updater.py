@@ -10,8 +10,10 @@ def get_updates() -> list[PackageUpdate]:
     seen = load_seen_packages()
 
     for u in updates:
-        u.category = packages_map.get(u.name, "system")
-        u.known = u.name in packages_map
+        meta = packages_map.get(u.name)
+        u.category = meta["category"] if meta else "system"
+        u.known = meta is not None
+        u.show_rebuilds = meta["show_rebuilds"] if meta else False
         u.is_new = u.name not in seen
 
     save_seen_packages(seen | {u.name for u in updates})
