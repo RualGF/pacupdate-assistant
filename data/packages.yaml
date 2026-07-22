@@ -29,6 +29,15 @@ applications:
   
   zed:
       source: zed
+  
+  autofirma:
+    source: "github:ctt-gob-es/clienteafirma"
+
+  emulationstation-de:
+    source: "gitlab:es-de/emulationstation-de"
+
+  lutris:
+    source: "github:lutris/lutris"
 
 drivers:
 

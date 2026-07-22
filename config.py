@@ -1,18 +1,19 @@
 from pathlib import Path
 import yaml
+import os
 
 DATA_DIR = Path(__file__).parent / "data"
 
+def load_github_token() -> str | None:
+    return os.environ.get("GITHUB_TOKEN")
 
 def load_packages_map() -> dict[str, str]:
     """Devuelve {nombre_paquete: categoria} a partir de packages.yaml"""
     raw = yaml.safe_load((DATA_DIR / "packages.yaml").read_text())
     mapping = {}
     for category, entries in raw.items():
-        # soporta tanto lista simple como dict con metadata
-        for name, meta in (entries or {}).items():
-            meta = meta or {}
-            mapping[name] = {"category": category, "show_rebuilds": meta.get("show_rebuilds", False)}
+        for name in (entries or {}):
+            mapping[name] = category
     return mapping
 
 

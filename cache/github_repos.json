@@ -1,0 +1,34 @@
+{
+  "htop": {
+    "repo": "htop-dev/htop",
+    "confidence": "high"
+  },
+  "lame": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libdovi": {
+    "repo": "quietvoid/dovi_tool",
+    "confidence": "medium"
+  },
+  "lutris": {
+    "repo": "lutris/lutris",
+    "confidence": "high"
+  },
+  "lib32-libva": {
+    "repo": "intel/libva",
+    "confidence": "medium"
+  },
+  "perl-http-message": {
+    "repo": "libwww-perl/HTTP-Message",
+    "confidence": "high"
+  },
+  "python-dropbox": {
+    "repo": "dropbox/dropbox-sdk-python",
+    "confidence": "medium"
+  },
+  "python-stone": {
+    "repo": "dropbox/stone",
+    "confidence": "high"
+  }
+}

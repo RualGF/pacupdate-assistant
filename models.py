@@ -71,7 +71,7 @@ class PackageUpdate:
         """¿Se debe mostrar en el resumen, o es ruido?"""
         if self.change_type is ChangeType.VERSION:
             return True
-        # solo rebuild: se muestra si el propio paquete lo pide, o si es nuevo
+        
         return self.known or self.is_new
     
     @property

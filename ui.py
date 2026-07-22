@@ -76,3 +76,13 @@ def render(updates: list[PackageUpdate]) -> None:
         console.print(
             "[dim]" + ", ".join(display_name(u.name, aliases) for u in hidden) + "[/dim]"
         )
+
+def render_pending_review(cache: dict[str, dict]) -> None:
+    dudosos = {name: info for name, info in cache.items() if info["confidence"] != "high" and info["repo"]}
+    if dudosos:
+        console.print(f"[bold]{'─' * 50}[/bold]")
+        console.print("[bold]🔍 Repos detectados sin confirmar[/bold]")
+        console.print(f"[bold]{'─' * 50}[/bold]")
+        for name, info in dudosos.items():
+            console.print(f"[dim]{name} → {info['repo']} (confianza: {info['confidence']})[/dim]")
+        console.print("[dim]Revísalos y, si son correctos, añádelos a packages.yaml.[/dim]")
