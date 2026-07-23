@@ -30,5 +30,69 @@
   "python-stone": {
     "repo": "dropbox/stone",
     "confidence": "high"
+  },
+  "xfsprogs": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "bind": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "cryptsetup": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-cachyos": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-cachyos-headers": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-cachyos-nvidia-open": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "brave-bin": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "firefox": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-libnm": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libnm": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libraqm": {
+    "repo": "HOST-Oman/libraqm",
+    "confidence": "high"
+  },
+  "networkmanager": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "rate-mirrors": {
+    "repo": "westandskif/rate-mirrors",
+    "confidence": "high"
+  },
+  "thunderbird": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "thunderbird-i18n-es-es": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "zed": {
+    "repo": null,
+    "confidence": "low"
   }
 }

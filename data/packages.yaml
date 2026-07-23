@@ -1,34 +1,34 @@
 applications:
 
   firefox:
-      source: mozilla
+    source: mozilla
   
   brave-bin:
-      source: brave
+    source: "link:https://github.com/brave/brave-browser/blob/master/CHANGELOG_DESKTOP.md"
 
   thunderbird:
-      source: mozilla
+    source: mozilla
 
   steam:
-      source: steam
+    source: "link:https://store.steampowered.com/news/"
 
   discord:
-      source: discord
+    source: "link:https://discord.com/release-notes"
 
   qbittorrent:
-      source: github
+    source: github
 
   libreoffice:
-      source: libreoffice
+    source: "link:https://www.libreoffice.org/download/release-notes/"
   
   claude-desktop:
-      source: anthropic
-  
+    source: "link:https://claude.com/download"  
+
   vscodium:
-      source: github
+    source: "link:https://code.visualstudio.com/updates/"
   
   zed:
-      source: zed
+    source: "github:zed-industries/zed"
   
   autofirma:
     source: "github:ctt-gob-es/clienteafirma"
@@ -40,10 +40,15 @@ applications:
     source: "github:lutris/lutris"
 
 drivers:
-
-  nvidia: {source: nvidia}
+  nvidia: {source: "link:https://www.nvidia.com/en-us/drivers/unix/"}
   linux: {source: kernel.org}
   mesa: {source: mesa}
+  linux-cachyos:
+    source: "github:CachyOS/linux-cachyos"
+  linux-cachyos-headers:
+    source: "github:CachyOS/linux-cachyos"
+  linux-cachyos-nvidia-open:
+    source: "github:CachyOS/linux-cachyos"
 
 desktop:
   plasma-desktop: {}

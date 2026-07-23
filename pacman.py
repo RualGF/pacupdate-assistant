@@ -1,9 +1,45 @@
 import subprocess
-import re
 import os
 
 from models import PackageUpdate
 from typing import Optional
+from dataclasses import dataclass, field
+
+@dataclass
+class PackageInfo:
+    description: str = ""
+    installed_from: str = ""
+    base: str = ""
+    required_by: list[str] = field(default_factory=list)
+
+def get_package_info() -> dict[str, PackageInfo]:
+    """Una sola llamada a pacman -Qi, captura todo lo que necesitamos de golpe."""
+    result = _run_pacman(["pacman", "-Qi"])
+    info: dict[str, PackageInfo] = {}
+    current = None
+    name = base = None
+
+    for line in result.stdout.splitlines():
+        if line.startswith("Installed From"):
+            current = PackageInfo(installed_from=line.split(":", 1)[1].strip())
+        elif line.startswith("Name"):
+            name = line.split(":", 1)[1].strip()
+            base = name
+        elif line.startswith("Description"):
+            if current:
+                current.description = line.split(":", 1)[1].strip()
+        elif line.startswith("Base"):
+            base = line.split(":", 1)[1].strip()
+        elif line.startswith("Required By"):
+            raw = line.split(":", 1)[1].strip()
+            if current:
+                current.required_by = [] if raw == "None" else raw.split()
+        elif line == "" and name and current:
+            current.base = base
+            info[name] = current
+            name = base = current = None
+
+    return info
 
 def _run_pacman(args: list[str]) -> subprocess.CompletedProcess:
     env = os.environ.copy()
@@ -48,25 +84,6 @@ def parse_checkupdates(lines: list[str]) -> list[PackageUpdate]:
         )
     return updates
 
-def get_package_origins() -> dict[str, dict]:
-    """Una sola llamada: {nombre: {'from': repo, 'base': pkgbase}}"""
-    result = _run_pacman(["pacman", "-Qi"])
-    origins = {}
-    name = base = origin = None
-    for line in result.stdout.splitlines():
-        if line.startswith("Installed From"):
-            origin = line.split(":", 1)[1].strip()
-        elif line.startswith("Name"):
-            name = line.split(":", 1)[1].strip()
-            base = name  # por defecto, si no hay línea "Base" luego
-        elif line.startswith("Base"):
-            base = line.split(":", 1)[1].strip()
-        elif line == "" and name:
-            origins[name] = {"from": origin, "base": base}
-            name = base = origin = None
-    return origins
-
-
 def get_foreign_packages() -> set[str]:
     result = _run_pacman(["pacman", "-Qmq"])
     return set(result.stdout.split())
@@ -77,5 +94,4 @@ def get_installed_version(pkgname: str) -> Optional[str]:
         return None
     parts = result.stdout.strip().split()
     return parts[1] if len(parts) == 2 else None
-
-            
+           

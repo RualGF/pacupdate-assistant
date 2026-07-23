@@ -16,6 +16,18 @@ def load_packages_map() -> dict[str, str]:
             mapping[name] = category
     return mapping
 
+def load_packages_sources() -> dict[str, str]:
+    """Devuelve {nombre_paquete: source_string}"""
+    raw = yaml.safe_load((DATA_DIR / "packages.yaml").read_text())
+    sources = {}
+    for category, entries in raw.items():
+        for name, meta in (entries or {}).items():
+            meta = meta or {}
+            src = meta.get("source") if isinstance(meta, dict) else None
+            if src:
+                sources[name] = src
+    return sources
+
 
 def load_aliases() -> dict[str, str]:
     """Nombre real del paquete -> nombre bonito para mostrar"""

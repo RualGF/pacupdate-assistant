@@ -1,6 +1,5 @@
 import requests
 import re
-import os
 from typing import Optional
 
 GITHUB_REPO_RE = re.compile(r"github\.com/([\w.-]+/[\w.-]+?)(?:\.git|/archive|/releases|[\"'])")
@@ -53,6 +52,45 @@ def verify_repo(repo: str, pkgname: str, known_version: Optional[str], token: Op
             version_core = known_version.split("-")[0].split(":")[-1]
             checks["version_found"] = any(version_core in tag for tag in tags)
 
-    matches = sum([checks["name_similarity"], checks["version_found"]])
-    checks["confidence"] = "high" if matches == 2 else ("medium" if matches == 1 else "low")
+    # version_found es la señal fuerte: por sí sola ya basta para "high".
+    # name_similarity solo desempata cuando no pudimos verificar versión.
+    if checks["version_found"]:
+        checks["confidence"] = "high"
+    elif checks["name_similarity"]:
+        checks["confidence"] = "medium"
+    else:
+        checks["confidence"] = "low"
+
     return checks
+
+def is_trustworthy(confidence: str) -> bool:
+    return confidence in ("high", "medium")
+
+def fetch_release_notes(repo: str, version: str, token: Optional[str]) -> Optional[dict]:
+    """
+    Busca el release de GitHub que corresponde a la nueva versión.
+    Devuelve {'type': 'text', 'body': ..., 'url': ...} si hay notas,
+    o {'type': 'link', 'url': ...} si el release existe pero sin cuerpo de texto,
+    o None si no se encuentra ningún release que matchee la versión.
+    """
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
+    text = _fetch(f"https://api.github.com/repos/{repo}/releases", headers)
+    if not text:
+        return None
+
+    import json
+    releases = json.loads(text)
+    version_core = version.split("-")[0].split(":")[-1]  # quita pkgrel/epoch
+
+    for release in releases:
+        tag = release.get("tag_name", "")
+        if version_core in tag:
+            body = (release.get("body") or "").strip().replace("\r\n", "\n")
+            url = release.get("html_url", "")
+            if body:
+                return {"type": "text", "body": body, "url": url}
+            return {"type": "link", "url": url}
+    if releases:
+        return {"type": "link", "url": f"https://github.com/{repo}/releases"}
+
+    return None  # no hay release para esa versión (quizás solo usan tags, sin Releases)
