@@ -74,6 +74,7 @@
   "nss",
   "occt",
   "ocean-sound-theme",
+  "oh-my-zsh-git",
   "onetbb",
   "opencv",
   "openssh",
@@ -99,6 +100,7 @@
   "python-isort",
   "python-markdown-it-py",
   "python-platformdirs",
+  "python-ruff",
   "python-soupsieve",
   "python-spyder-kernels",
   "python-stone",
@@ -110,6 +112,7 @@
   "qqc2-breeze-style",
   "rate-mirrors",
   "ripgrep",
+  "ruff",
   "shared-mime-info",
   "spectacle",
   "spyder",
@@ -122,5 +125,6 @@
   "wget",
   "xdg-desktop-portal-kde",
   "xfsprogs",
-  "zed"
+  "zed",
+  "zsh-theme-powerlevel10k"
 ]

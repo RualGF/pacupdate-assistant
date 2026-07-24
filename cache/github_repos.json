@@ -94,5 +94,21 @@
   "zed": {
     "repo": null,
     "confidence": "low"
+  },
+  "oh-my-zsh-git": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-ruff": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "ruff": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "zsh-theme-powerlevel10k": {
+    "repo": "romkatv/powerlevel10k",
+    "confidence": "medium"
   }
 }

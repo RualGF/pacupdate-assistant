@@ -22,8 +22,8 @@ applications:
     source: "link:https://www.libreoffice.org/download/release-notes/"
   
   claude-desktop:
-    source: "link:https://claude.com/download"  
-
+    source: "link:https://support.claude.com/es/articles/12138966-notas-de-la-version"
+  
   vscodium:
     source: "link:https://code.visualstudio.com/updates/"
   
@@ -38,6 +38,9 @@ applications:
 
   lutris:
     source: "github:lutris/lutris"
+
+  OCCT:
+    source: "link:https://www.ocbase.com/news/"
 
 drivers:
   nvidia: {source: "link:https://www.nvidia.com/en-us/drivers/unix/"}
