@@ -15,8 +15,11 @@ def _extract_repo(pkgbuild_text: str) -> Optional[str]:
 
 
 def _fetch(url: str, headers: dict) -> Optional[str]:
-    resp = requests.get(url, headers=headers, timeout=5)
-    return resp.text if resp.status_code == 200 else None
+    try:
+        resp = requests.get(url, headers=headers, timeout=5)
+        return resp.text if resp.status_code == 200 else None
+    except requests.exceptions.RequestException:
+        return None  # timeout, error de red, DNS, lo que sea: lo tratamos como "no encontrado"
 
 
 def discover_github_repo(pkgname: str, pkgbase: str, is_foreign: bool, installed_from: str) -> Optional[str]:
