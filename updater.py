@@ -2,7 +2,8 @@ from pacman import run_checkupdates, parse_checkupdates, get_foreign_packages, P
 from config import load_packages_map, load_github_token
 from cache import load_seen_packages, save_seen_packages, load_github_repo_cache, save_github_repo_cache
 from github import discover_github_repo, verify_repo, fetch_release_notes, is_trustworthy
-from models import PackageUpdate, ChangeType
+from models import PackageUpdate, ChangeType, VersionBump
+from collections import defaultdict
 
 import gitlab
 
@@ -10,6 +11,8 @@ MOZILLA_URLS = {
     "firefox": "https://www.firefox.com/en-US/firefox/{version}/releasenotes/",
     "thunderbird": "https://www.thunderbird.net/en-US/thunderbird/{version}/releasenotes/",
 }
+
+MIN_GROUP_SIZE = 5  # umbral para considerar que es un release real, no casualidad
 
 def get_updates() -> list[PackageUpdate]:
     updates = parse_checkupdates(run_checkupdates())
@@ -85,3 +88,29 @@ def get_changelogs(updates: list[PackageUpdate], sources: dict[str, str]) -> dic
             changelogs[u.name] = result
 
     return changelogs
+
+def detect_group_releases(updates: list[PackageUpdate], groups: dict[str, str]) -> tuple[list[dict], set[str]]:
+    """
+    Agrupa paquetes NO clasificados que comparten grupo pacman y suben de versión juntos.
+    Solo cuenta si hay al menos un salto MAJOR entre ellos.
+    """
+    by_group: dict[str, list[PackageUpdate]] = defaultdict(list)
+    for u in updates:
+        if u.known or u.change_type is not ChangeType.VERSION:
+            continue
+        group = groups.get(u.name)
+        if group:
+            by_group[group].append(u)
+
+    releases, absorbed = [], set()
+    for group, members in by_group.items():
+        if len(members) < MIN_GROUP_SIZE:
+            continue
+        versions = [(m.old_pkgver, m.new_pkgver) for m in members]
+        old_v, new_v = max(set(versions), key=versions.count)
+        bump = max((m.version_bump for m in members), key=lambda b: list(VersionBump).index(b))
+
+        releases.append({"group": group, "old": old_v, "new": new_v, "count": len(members), "bump": bump})
+        absorbed.update(m.name for m in members)
+
+    return releases, absorbed

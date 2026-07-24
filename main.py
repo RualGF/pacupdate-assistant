@@ -1,9 +1,9 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from updater import get_updates, resolve_github_repos, get_changelogs
+from updater import get_updates, resolve_github_repos, get_changelogs, detect_group_releases
 from ui import render
-from pacman import get_package_info
+from pacman import get_package_info, get_package_groups
 from config import load_packages_sources
 
 def main() -> None:
@@ -15,7 +15,10 @@ def main() -> None:
     resolve_github_repos(updates, pkg_info)
     sources = load_packages_sources()
     changelogs = get_changelogs(updates, sources)
-    render(updates, changelogs)
+    groups = get_package_groups()
+    group_releases, absorbed = detect_group_releases(updates, groups)
+
+    render(updates, changelogs, group_releases, absorbed)
 
 
 if __name__ == "__main__":

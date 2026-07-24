@@ -94,4 +94,14 @@ def get_installed_version(pkgname: str) -> Optional[str]:
         return None
     parts = result.stdout.strip().split()
     return parts[1] if len(parts) == 2 else None
-           
+
+def get_package_groups() -> dict[str, str]:
+    """Una sola llamada barata: {nombre: primer_grupo}"""
+    result = _run_pacman(["pacman", "-Qg"])
+    groups: dict[str, str] = {}
+    for line in result.stdout.splitlines():
+        parts = line.split(maxsplit=1)
+        if len(parts) == 2:
+            group, name = parts
+            groups.setdefault(name, group)
+    return groups

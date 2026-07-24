@@ -24,7 +24,8 @@ def display_name(pkg_name: str, aliases: dict[str, str]) -> str:
     return aliases.get(pkg_name, pkg_name)
 
 
-def render(updates: list[PackageUpdate], changelogs: dict[str, dict]) -> None:
+def render(updates, changelogs, group_releases=None, absorbed=None) -> None:
+    absorbed = absorbed or set()
     aliases = load_aliases()
     pkg_info = get_package_info()  # una sola llamada, se usa en toda la función
 
@@ -42,7 +43,7 @@ def render(updates: list[PackageUpdate], changelogs: dict[str, dict]) -> None:
     visible = [u for u in updates if u.visible]
      # Separamos los que piden clasificación de los que van a sus categorías normales
     to_classify = [u for u in visible if u.needs_classification]
-    rest = [u for u in visible if not u.needs_classification]
+    rest = [u for u in visible if not u.needs_classification and u.name not in absorbed]
 
     by_category: dict[str, list[PackageUpdate]] = {c: [] for c in CATEGORY_ORDER}
     for u in rest:
@@ -82,6 +83,14 @@ def render(updates: list[PackageUpdate], changelogs: dict[str, dict]) -> None:
                 console.print(
                     f"🟡 {u.name} (pkgrel {u.old_pkgrel}→{u.new_pkgrel})"
                 )
+    if group_releases:
+        console.print(f"[bold]{'─' * 50}[/bold]")
+        console.print("[bold]🖥️  Actualizaciones de escritorio[/bold]")
+        console.print(f"[bold]{'─' * 50}[/bold]")
+        for rel in group_releases:
+            marker = BUMP_ICONS.get(rel["bump"], "🟢 ")
+            console.print(f"{marker}{rel['group'].capitalize()} {rel['old']} → {rel['new']} ({rel['count']} paquetes)")
+            console.print("   [dim]https://kde.org/announcements/plasma/[/dim]")
 
     if to_classify:
         console.print(f"[bold]{'─' * 50}[/bold]")
