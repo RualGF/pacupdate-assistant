@@ -77,23 +77,25 @@ def fetch_release_notes(repo: str, version: str, token: Optional[str]) -> Option
     o None si no se encuentra ningún release que matchee la versión.
     """
     headers = {"Authorization": f"Bearer {token}"} if token else {}
-    text = _fetch(f"https://api.github.com/repos/{repo}/releases", headers)
-    if not text:
-        return None
+    version_core = version.split("-")[0].split(":")[-1]    
+    text = _fetch(f"https://api.github.com/repos/{repo}/releases?per_page=100", headers)
+    if text:
+        import json
+        for release in json.loads(text):
+            tag = release.get("tag_name") or ""
+            if version_core in tag:
+                body = (release.get("body") or "").strip().replace("\r\n", "\n")
+                url = release.get("html_url", "")
+                if body:
+                    return {"type": "text", "body": body, "url": url}
+                return {"type": "link", "url": url}
 
-    import json
-    releases = json.loads(text)
-    version_core = version.split("-")[0].split(":")[-1]  # quita pkgrel/epoch
+    tags_text = _fetch(f"https://api.github.com/repos/{repo}/tags?per_page=100", headers)
+    if tags_text:
+        import json
+        for t in json.loads(tags_text):
+            tag = t.get("name", "")
+            if version_core in tag:
+                return {"type": "link", "url": f"https://github.com/{repo}/releases/tag/{tag}"}
 
-    for release in releases:
-        tag = release.get("tag_name", "")
-        if version_core in tag:
-            body = (release.get("body") or "").strip().replace("\r\n", "\n")
-            url = release.get("html_url", "")
-            if body:
-                return {"type": "text", "body": body, "url": url}
-            return {"type": "link", "url": url}
-    if releases:
-        return {"type": "link", "url": f"https://github.com/{repo}/releases"}
-
-    return None  # no hay release para esa versión (quizás solo usan tags, sin Releases)
+    return None
