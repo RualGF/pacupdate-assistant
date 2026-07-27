@@ -8,12 +8,13 @@ console = Console()
 
 CATEGORY_TITLES = {
     "applications": "📱 Aplicaciones",
+    "tools": "🛠️  Herramientas",
     "drivers": "🎮 Drivers",
-    "desktop": "🖥️ Escritorio",
+    "desktop": "🖥️ Entorno de escritorio",
     "libraries": "🔧 Bibliotecas",
     "system": "⚙️  Sistema",
 }
-CATEGORY_ORDER = ["applications", "drivers", "desktop", "libraries", "system"]
+CATEGORY_ORDER = ["applications", "tools", "drivers", "desktop", "libraries", "system"]
 
 BUMP_ICONS = {
     VersionBump.MAJOR: "🔴 ",     # se deja un espacio al final para que no quede pegado
