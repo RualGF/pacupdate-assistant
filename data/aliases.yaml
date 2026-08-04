@@ -10,4 +10,10 @@ dolphin: Dolphin
 brave-bin: Brave
 vscodium: VSCodium IDE
 zed: Zed IDE
-OCCT: OverClock Checking Tool
+occt: OverClock Checking Tool
+spyder: IDE Spyder Data Science
+okular: Visor de documentos universal
+emulationstation-de: Frontend de emuladores
+kdeconnect: Comunicación entre KDE y smartphone
+heroic-games-launcher-bin: Lanzador de Juegos de Epic, Amazon y GOG
+libreoffice-fresh: Rama de Libreoffice que contiene mejoras

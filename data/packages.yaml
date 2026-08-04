@@ -16,10 +16,10 @@ applications:
     source: "link:https://discord.com/release-notes"
 
   qbittorrent:
-    source: github
+    source: "github:qbittorrent/qBittorrent"
 
-  libreoffice:
-    source: "link:https://www.libreoffice.org/download/release-notes/"
+  libreoffice-fresh:
+    source: "link:https://es.libreoffice.org/novedades/"
   
   claude-desktop:
     source: "link:https://support.claude.com/es/articles/12138966-notas-de-la-version"
@@ -39,19 +39,72 @@ applications:
   lutris:
     source: "github:lutris/lutris"
 
-  OCCT:
+  occt:
     source: "link:https://www.ocbase.com/news/"
+  
+  spyder:
+    source: "github:spyder-ide/spyder"
+
+  okular:
+    source: "github:KDE/okular"  
+
+  zoom:
+    source: flatpak
+  
+  minion:
+    source: "link:https://minion.gg/?log"
+  
+  kdeconnect:
+    source: "github:KDE/kdeconnect-kde"  
+  
+  goverlay:
+    source: https://github.com/benjamimgois/goverlay
+  
+  heroic-games-launcher-bin:
+    source: "github:Heroic-Games-Launcher/HeroicGamesLauncher"
+  
+  retroarch:
+    source: "github:libretro/RetroArch"
+
+tools:
+  python:
+    source: "github:python/cpython"
+  
+  proton-cachyos-slr:
+    source: "github:CachyOS/proton-cachyos"
+
+  umu-launcher:
+    source: "github:Open-Wine-Components/umu-launcher"
+  
+  wine:
+    source: "gitlab-self:gitlab.winehq.org:wine/wine"
+
+  winetricks:
+    source: "github:Winetricks/winetricks"
+  
+  gamescope-nvidia:
+    source: "link:https://github.com/sharkautarch/gamescope/tree/nvidia-fix" 
+  
+  shelly:
+    source: "github:Seafoam-Labs/Shelly-ALPM"
+
 
 drivers:
   nvidia: {source: "link:https://www.nvidia.com/en-us/drivers/unix/"}
   linux: {source: kernel.org}
   mesa: {source: mesa}
   linux-cachyos:
-    source: "github:CachyOS/linux-cachyos"
+    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos"
   linux-cachyos-headers:
-    source: "github:CachyOS/linux-cachyos"
+    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos"
   linux-cachyos-nvidia-open:
-    source: "github:CachyOS/linux-cachyos"
+    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos"
+  linux-cachyos-lts:
+    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos-lts"
+  linux-cachyos-lts-headers:
+    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos-lts"
+  linux-cachyos-lts-nvidia-open:
+    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos-lts"
 
 desktop:
   plasma-desktop: {}
@@ -60,3 +113,5 @@ desktop:
 
 libraries:
   libtorrent-rasterbar: {}
+  libreoffice-fresh-es: {}
+  thunderbird-i18n-es-es: {}

@@ -110,5 +110,505 @@
   "zsh-theme-powerlevel10k": {
     "repo": "romkatv/powerlevel10k",
     "confidence": "medium"
+  },
+  "cython": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "occt": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libreoffice-fresh-es": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libreoffice-fresh": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "bpf": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "claude-desktop": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "cpupower": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "hyperv": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-sqlite": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-systemd": {
+    "repo": "systemd/systemd",
+    "confidence": "high"
+  },
+  "libical": {
+    "repo": "libical/libical",
+    "confidence": "high"
+  },
+  "parallel": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "proton-cachyos-slr": {
+    "repo": "CachyOS/proton-cachyos",
+    "confidence": "medium"
+  },
+  "python-annotated-types": {
+    "repo": "annotated-types/annotated-types",
+    "confidence": "high"
+  },
+  "scx-manager": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "sqlite": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "systemd": {
+    "repo": "systemd/systemd",
+    "confidence": "high"
+  },
+  "systemd-libs": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "systemd-resolvconf": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "systemd-sysvcompat": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "tesseract": {
+    "repo": "tesseract-ocr/tesseract",
+    "confidence": "high"
+  },
+  "umu-launcher": {
+    "repo": "Open-Wine-Components/umu-launcher",
+    "confidence": "high"
+  },
+  "wildmidi": {
+    "repo": "Mindwerks/wildmidi",
+    "confidence": "high"
+  },
+  "wine": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libdvdcss": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "gcc": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "gcc-libs": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "glibc": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "goverlay": {
+    "repo": "benjamimgois/goverlay",
+    "confidence": "high"
+  },
+  "imagemagick": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-gcc-libs": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-glibc": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libasan": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libatomic": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libgcc": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libgfortran": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libgomp": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libhwasan": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "liblsan": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libobjc": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libquadmath": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libstdc++": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libtsan": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libubsan": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-mistune": {
+    "repo": "lepture/mistune",
+    "confidence": "high"
+  },
+  "ufw-extras": {
+    "repo": "xyproto/ufw-extras",
+    "confidence": "high"
+  },
+  "python-prompt_toolkit": {
+    "repo": "prompt-toolkit/python-prompt-toolkit",
+    "confidence": "high"
+  },
+  "lib32-libnghttp3": {
+    "repo": "ngtcp2/nghttp3",
+    "confidence": "high"
+  },
+  "lib32-libngtcp2": {
+    "repo": "ngtcp2/ngtcp2",
+    "confidence": "high"
+  },
+  "linux-cachyos-lts": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-cachyos-lts-headers": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-cachyos-lts-nvidia-open": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "cachyos-ananicy-rules": {
+    "repo": "CachyOS/ananicy-rules",
+    "confidence": "high"
+  },
+  "fwupd": {
+    "repo": "fwupd/fwupd",
+    "confidence": "high"
+  },
+  "libnghttp3": {
+    "repo": "ngtcp2/nghttp3",
+    "confidence": "high"
+  },
+  "libngtcp2": {
+    "repo": "ngtcp2/ngtcp2",
+    "confidence": "high"
+  },
+  "libxmlb": {
+    "repo": "hughsie/libxmlb",
+    "confidence": "high"
+  },
+  "chromaprint": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "discord": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "cmake": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "faac": {
+    "repo": "knik0/faac",
+    "confidence": "high"
+  },
+  "ldb": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-ocl-icd": {
+    "repo": "OCL-dev/ocl-icd",
+    "confidence": "high"
+  },
+  "libarchive": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libssh": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libwbclient": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "ocl-icd": {
+    "repo": "OCL-dev/ocl-icd",
+    "confidence": "high"
+  },
+  "passim": {
+    "repo": "hughsie/passim",
+    "confidence": "high"
+  },
+  "perl-http-cookies": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-certifi": {
+    "repo": "certifi/python-certifi",
+    "confidence": "high"
+  },
+  "python-wrapt": {
+    "repo": "GrahamDumpleton/wrapt",
+    "confidence": "high"
+  },
+  "shelly": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "smbclient": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "github-cli": {
+    "repo": "cli/cli",
+    "confidence": "high"
+  },
+  "lib32-libnghttp2": {
+    "repo": "nghttp2/nghttp2",
+    "confidence": "high"
+  },
+  "libnghttp2": {
+    "repo": "nghttp2/nghttp2",
+    "confidence": "high"
+  },
+  "mesa": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "nfs-utils": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "nfsidmap": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-jupyter-builder": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-lsp-server": {
+    "repo": "python-lsp/python-lsp-server",
+    "confidence": "high"
+  },
+  "zxing-cpp": {
+    "repo": "zxing-cpp/zxing-cpp",
+    "confidence": "high"
+  },
+  "harfbuzz": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "harfbuzz-icu": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-harfbuzz": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "noto-fonts": {
+    "repo": "notofonts/notofonts",
+    "confidence": "low"
+  },
+  "python-gevent": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-shtab": {
+    "repo": "iterative/shtab",
+    "confidence": "high"
+  },
+  "python-traitlets": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "shadow": {
+    "repo": "shadow-maint/shadow",
+    "confidence": "medium"
+  },
+  "glslang": {
+    "repo": "KhronosGroup/glslang",
+    "confidence": "high"
+  },
+  "lib32-spirv-tools": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-vulkan-icd-loader": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "plasma-login-manager": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "shaderc": {
+    "repo": "google/shaderc",
+    "confidence": "high"
+  },
+  "spirv-tools": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "vulkan-icd-loader": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "vulkan-tools": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "archlinux-keyring": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "at-spi2-core": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "binutils": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "cachy-update": {
+    "repo": "CachyOS/cachy-update",
+    "confidence": "high"
+  },
+  "cachyos-hello": {
+    "repo": "cachyos/cachyos-welcome",
+    "confidence": "high"
+  },
+  "docker": {
+    "repo": "docker/cli",
+    "confidence": "high"
+  },
+  "docker-compose": {
+    "repo": "docker/compose",
+    "confidence": "high"
+  },
+  "fzf": {
+    "repo": "junegunn/fzf",
+    "confidence": "high"
+  },
+  "glfw": {
+    "repo": "glfw/glfw",
+    "confidence": "high"
+  },
+  "hwdata": {
+    "repo": "vcrhonek/hwdata",
+    "confidence": "high"
+  },
+  "hwinfo": {
+    "repo": "openSUSE/hwinfo",
+    "confidence": "medium"
+  },
+  "lib32-at-spi2-core": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libadwaita": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "npm": {
+    "repo": "npm/cli",
+    "confidence": "high"
+  },
+  "obsidian": {
+    "repo": "obsidianmd/obsidian-releases",
+    "confidence": "high"
+  },
+  "python-cbor2": {
+    "repo": "agronholm/cbor2",
+    "confidence": "high"
+  },
+  "python-matplotlib": {
+    "repo": "matplotlib/matplotlib",
+    "confidence": "high"
+  },
+  "python-pip": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-pyqt5-sip": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-pyqt6-sip": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "simdjson": {
+    "repo": "simdjson/simdjson",
+    "confidence": "high"
+  },
+  "steam": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "steam-devices": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "talloc": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "tevent": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "ttf-fantasque-nerd": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "ttf-meslo-nerd": {
+    "repo": null,
+    "confidence": "low"
   }
 }
