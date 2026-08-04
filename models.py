@@ -16,7 +16,7 @@ class VersionBump(Enum):
 
 
 _VCS_SUFFIXES = ("-git", "-svn", "-bzr", "-hg", "-cvs")
-
+GIT_SNAPSHOT_RE = re.compile(r"\+r\d+\+g[0-9a-f]+")
 
 def _numeric_parts(version: str) -> tuple[int, ...]:
     version = version.split(":")[-1]  # quita epoch (ej. "2:1.2.3" -> "1.2.3")
@@ -24,7 +24,7 @@ def _numeric_parts(version: str) -> tuple[int, ...]:
 
 
 def classify_bump(name: str, old_pkgver: str, new_pkgver: str) -> VersionBump:
-    if name.endswith(_VCS_SUFFIXES):
+    if name.endswith(_VCS_SUFFIXES) or GIT_SNAPSHOT_RE.search(new_pkgver):
         return VersionBump.SNAPSHOT
 
     old_parts = _numeric_parts(old_pkgver)

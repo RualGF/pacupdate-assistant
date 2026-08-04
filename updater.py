@@ -1,4 +1,5 @@
-from pacman import run_checkupdates, parse_checkupdates, get_foreign_packages, PackageInfo
+from pacman import run_checkupdates, parse_checkupdates, get_foreign_packages, get_installed_version, PackageInfo, _split_version
+from aur import check_aur_updates
 from config import load_packages_map, load_github_token
 from cache import load_seen_packages, save_seen_packages, load_github_repo_cache, save_github_repo_cache
 from github import discover_github_repo, verify_repo, fetch_release_notes, is_trustworthy
@@ -78,6 +79,9 @@ def get_changelogs(updates: list[PackageUpdate], sources: dict[str, str]) -> dic
         elif raw_source == "mozilla" and u.name in MOZILLA_URLS:
             url = MOZILLA_URLS[u.name].format(version=u.new_pkgver)
             result = {"type": "link", "url": url}
+        elif raw_source.startswith("gitlab-self:"):
+            _, host, project = raw_source.split(":", 2)
+            result = gitlab.fetch_release_notes(project, u.new_pkgver, host=host)
         else:
             # sin estrategia curada: probamos el repo autodescubierto, si es fiable
             entry = cache.get(u.name)
@@ -114,3 +118,19 @@ def detect_group_releases(updates: list[PackageUpdate], groups: dict[str, str]) 
         absorbed.update(m.name for m in members)
 
     return releases, absorbed
+
+def get_aur_updates() -> list[PackageUpdate]:
+    foreign = get_foreign_packages()
+    installed = {pkg: get_installed_version(pkg) for pkg in foreign}
+    raw_updates = check_aur_updates(foreign, installed)
+
+    result = []
+    for u in raw_updates:
+        old_pkgver, old_pkgrel = _split_version(u["old"])
+        new_pkgver, new_pkgrel = _split_version(u["new"])
+        result.append(PackageUpdate(
+            name=u["name"],
+            old_pkgver=old_pkgver, old_pkgrel=old_pkgrel,
+            new_pkgver=new_pkgver, new_pkgrel=new_pkgrel,
+        ))
+    return result

@@ -1,13 +1,13 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from updater import get_updates, resolve_github_repos, get_changelogs, detect_group_releases
+from updater import get_updates, resolve_github_repos, get_changelogs, detect_group_releases, get_aur_updates
 from ui import render
 from pacman import get_package_info, get_package_groups
 from config import load_packages_sources
 
 def main() -> None:
-    updates = get_updates()
+    updates = get_updates() + get_aur_updates()
     if not updates:
         print("✅ Sistema actualizado, no hay paquetes pendientes.")
         return

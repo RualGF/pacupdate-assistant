@@ -37,8 +37,13 @@ def render(updates, changelogs, group_releases=None, absorbed=None) -> None:
         if info.description:
             console.print(f"   [dim]{info.description}[/dim]")
         if info.required_by:
-            usados_por = ", ".join(info.required_by)
-            console.print(f"   [dim]usado por: {usados_por}[/dim]")
+            MAX_SHOWN = 8
+            shown = info.required_by[:MAX_SHOWN]
+            resto = len(info.required_by) - MAX_SHOWN
+            texto = ", ".join(shown)
+            if resto > 0:
+                texto += f" y {resto} más"
+            console.print(f"   [dim]usado por: {texto}[/dim]")
     
             
     visible = [u for u in updates if u.visible]
