@@ -610,5 +610,165 @@
   "ttf-meslo-nerd": {
     "repo": null,
     "confidence": "low"
+  },
+  "lua": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kwin": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-pango": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "pango": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "plasma-desktop": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-argcomplete": {
+    "repo": "kislyuk/argcomplete",
+    "confidence": "high"
+  },
+  "python-cffi": {
+    "repo": "python-cffi/cffi",
+    "confidence": "high"
+  },
+  "sdl3": {
+    "repo": "libsdl-org/SDL",
+    "confidence": "high"
+  },
+  "shelly-flatpak-backend": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "electron43": {
+    "repo": "electron/electron",
+    "confidence": "medium"
+  },
+  "lib32-nvidia-utils": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-opencl-nvidia": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libxfont2": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "nvidia-utils": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "opencl-nvidia": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "jupyter-nbformat": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "openvpn": {
+    "repo": "OpenVPN/openvpn",
+    "confidence": "high"
+  },
+  "python-reportlab": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "udisks2": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-cairo": {
+    "repo": "pygobject/pycairo",
+    "confidence": "high"
+  },
+  "python-packaging": {
+    "repo": "pypa/packaging",
+    "confidence": "high"
+  },
+  "fluidsynth": {
+    "repo": "fluidsynth/fluidsynth",
+    "confidence": "high"
+  },
+  "lib32-mpg123": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "mpg123": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "openexr": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "ostree": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-tornado": {
+    "repo": "tornadoweb/tornado",
+    "confidence": "high"
+  },
+  "retroarch": {
+    "repo": "libretro/RetroArch",
+    "confidence": "high"
+  },
+  "x265": {
+    "repo": "Multicorewareinc/x265",
+    "confidence": "high"
+  },
+  "fastfetch": {
+    "repo": "fastfetch-cli/fastfetch",
+    "confidence": "high"
+  },
+  "glances": {
+    "repo": "nicolargo/glances",
+    "confidence": "high"
+  },
+  "heroic-games-launcher-bin": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-wayland": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "pkgfile": {
+    "repo": "falconindy/pkgfile",
+    "confidence": "high"
+  },
+  "python-numpy": {
+    "repo": "numpy/meson",
+    "confidence": "low"
+  },
+  "cachyos-settings": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libxnvctrl": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "nvidia-settings": {
+    "repo": "NVIDIA/nvidia-settings",
+    "confidence": "high"
+  },
+  "python": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "wayland": {
+    "repo": null,
+    "confidence": "low"
   }
 }

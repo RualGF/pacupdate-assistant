@@ -88,6 +88,18 @@ tools:
   shelly:
     source: "github:Seafoam-Labs/Shelly-ALPM"
 
+  cachy-update:
+    source: "link:https://github.com/CachyOS/cachy-update/blob/main/CHANGELOG.md"
+  
+  cachyos-hello:
+    source: "github:cachyos/cachyos-welcome"
+  
+  docker:
+    source: "github:docker/cli"
+
+  cachyos-settings: {}
+  nvidia-settings: {}
+  libxnvctrl: {}
 
 drivers:
   nvidia: {source: "link:https://www.nvidia.com/en-us/drivers/unix/"}
@@ -110,6 +122,7 @@ desktop:
   plasma-desktop: {}
   kwin: {}
   dolphin: {}
+  wayland: {}
 
 libraries:
   libtorrent-rasterbar: {}

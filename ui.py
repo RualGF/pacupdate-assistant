@@ -57,7 +57,8 @@ def render(updates, changelogs, group_releases=None, absorbed=None) -> None:
 
     for category in CATEGORY_ORDER:
         items = by_category.get(category, [])
-        if not items:
+        matching_group = [r for r in (group_releases or []) if category == "desktop" and r["group"] == "plasma"]
+        if not items and not matching_group:
             continue
 
         console.print(f"[bold]{'─' * 50}[/bold]")
@@ -89,15 +90,13 @@ def render(updates, changelogs, group_releases=None, absorbed=None) -> None:
                 console.print(
                     f"🟡 {u.name} (pkgrel {u.old_pkgrel}→{u.new_pkgrel})"
                 )
-    if group_releases:
-        console.print(f"[bold]{'─' * 50}[/bold]")
-        console.print("[bold]🖥️  Actualizaciones de escritorio[/bold]")
-        console.print(f"[bold]{'─' * 50}[/bold]")
-        for rel in group_releases:
+    
+        for rel in matching_group:
             marker = BUMP_ICONS.get(rel["bump"], "🟢 ")
-            console.print(f"{marker}{rel['group'].capitalize()} {rel['old']} → {rel['new']} ({rel['count']} paquetes)")
-            console.print("   [dim]https://kde.org/announcements/plasma/[/dim]")
-
+            console.print(f"{marker}Paquetes de Plasma {rel['old']} → {rel['new']} ({rel['count']} paquetes más)")
+            major = rel["new"].split(".")[0]
+            console.print(f"   [dim]https://kde.org/es/announcements/plasma/{major}/{rel['new']}/[/dim]")
+            
     if to_classify:
         console.print(f"[bold]{'─' * 50}[/bold]")
         console.print("[bold]❓ Sin clasificar[/bold]")
