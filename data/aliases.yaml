@@ -5,15 +5,17 @@ qbittorrent: qBittorrent
 libtorrent-rasterbar: libtorrent-rasterbar
 linux-cachyos: Kernel CachyOS
 plasma-desktop: Plasma Desktop
-kwin: Gestor de ventanas KWin
+kwin: KWin
 dolphin: Dolphin
 brave-bin: Brave
-vscodium: VSCodium IDE
-zed: Zed IDE
-occt: OverClock Checking Tool
-spyder: IDE Spyder Data Science
-okular: Visor de documentos universal
-emulationstation-de: Frontend de emuladores
-kdeconnect: Comunicación entre KDE y smartphone
-heroic-games-launcher-bin: Lanzador de Juegos de Epic, Amazon y GOG
-libreoffice-fresh: Rama de Libreoffice que contiene mejoras
+vscodium: VSCodium
+zed: Zed
+occt: OCCT
+spyder: Spyder
+okular: Okular
+emulationstation-de: EmulationStation DE
+kdeconnect: KDE Connect
+heroic-games-launcher-bin: Heroic Games Launcher
+libreoffice-fresh: LibreOffice
+plocate: "plocate (búsqueda rápida de archivos, tipo 'locate')"
+bpf: "bpf (herramientas eBPF, usadas por schedulers scx)"

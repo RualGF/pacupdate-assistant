@@ -58,17 +58,19 @@ applications:
     source: "github:KDE/kdeconnect-kde"  
   
   goverlay:
-    source: https://github.com/benjamimgois/goverlay
+    source: "github:benjamimgois/goverlay"
   
   heroic-games-launcher-bin:
     source: "github:Heroic-Games-Launcher/HeroicGamesLauncher"
   
   retroarch:
     source: "github:libretro/RetroArch"
+  
+  keepassxc: {}
 
 tools:
   python:
-    source: "github:python/cpython"
+    source: "link:https://docs.python.org/3.14/"
   
   proton-cachyos-slr:
     source: "github:CachyOS/proton-cachyos"
@@ -99,7 +101,10 @@ tools:
 
   cachyos-settings: {}
   nvidia-settings: {}
-  libxnvctrl: {}
+  plocate: {}
+  cpupower: {}
+  obsidian: {}
+  flatpak: {}
 
 drivers:
   nvidia: {source: "link:https://www.nvidia.com/en-us/drivers/unix/"}
@@ -128,3 +133,20 @@ libraries:
   libtorrent-rasterbar: {}
   libreoffice-fresh-es: {}
   thunderbird-i18n-es-es: {}
+  lib32-fontconfig: {}
+  lib32-libffi: {}
+  libffi: {}
+  libxnvctrl: {}
+  lib32-expat: {}
+
+
+python:
+  python-levenshtein: {}
+  python-typing-inspection: {}
+  python-curl_cffi: {}
+  python-gevent: {}
+  python-platformdirs: {}
+  python-xlib: {}
+  python-cloudpickle: {}
+  jupyter-notebook: {}
+  jupyterlab: {}

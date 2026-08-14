@@ -12,9 +12,10 @@ CATEGORY_TITLES = {
     "drivers": "🎮 Drivers",
     "desktop": "🖥️ Entorno de escritorio",
     "libraries": "🔧 Bibliotecas",
+    "python": "🐍 Python",
     "system": "⚙️  Sistema",
 }
-CATEGORY_ORDER = ["applications", "tools", "drivers", "desktop", "libraries", "system"]
+CATEGORY_ORDER = ["applications", "tools", "drivers", "desktop", "libraries", "python", "system"]
 
 BUMP_ICONS = {
     VersionBump.MAJOR: "🔴 ",     # se deja un espacio al final para que no quede pegado
@@ -69,10 +70,8 @@ def render(updates, changelogs, group_releases=None, absorbed=None) -> None:
             name = display_name(u.name, aliases)
             if u.change_type is ChangeType.VERSION:
                 marker = BUMP_ICONS.get(u.version_bump, "🆕 " if u.is_new else "🟢 ")
-                console.print(f"{marker}{u.name} {u.old_pkgver} → {u.new_pkgver}")
-                # Solo en Sistema mostramos descripción, en las categorías que ya conoces no hace falta
-                if category == "system":
-                    _print_detail(u)
+                console.print(f"{marker}{name} {u.old_pkgver} → {u.new_pkgver}")
+                _print_detail(u)
                 
                 changelog = changelogs.get(u.name)
                 if changelog:
@@ -88,7 +87,7 @@ def render(updates, changelogs, group_releases=None, absorbed=None) -> None:
                         console.print(f"   [dim]📝 Notas de versión: {changelog['url']}[/dim]")
             else:  # solo rebuild, pero es "known" o "new" (si no, no llegaría aquí)
                 console.print(
-                    f"🟡 {u.name} (pkgrel {u.old_pkgrel}→{u.new_pkgrel})"
+                    f"🟡 {name} (pkgrel {u.old_pkgrel}→{u.new_pkgrel})"
                 )
     
         for rel in matching_group:
