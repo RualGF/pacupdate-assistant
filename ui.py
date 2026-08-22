@@ -1,10 +1,14 @@
 from rich.console import Console
 from rich.markdown import Markdown
 from models import PackageUpdate, ChangeType, VersionBump
-from config import load_aliases
+from config import load_aliases, load_github_token
 from pacman import get_package_info
+from updater import resolve_one_changelog
+from cache import load_github_repo_cache
 
-console = Console()
+import re
+
+console = Console(force_terminal=True)
 
 CATEGORY_TITLES = {
     "applications": "📱 Aplicaciones",
@@ -22,11 +26,24 @@ BUMP_ICONS = {
     VersionBump.SNAPSHOT: "🌀 ",  # el nombre del paquete
 }
 
+REFERENCE_RE = re.compile(r'^\[(\w+)\]:\s*(\S+)', re.MULTILINE)
+
+def safe_markdown_preview(body: str, limit: int = 600) -> str:
+    references = REFERENCE_RE.findall(body)
+    preview = body[:limit]
+    if len(body) > limit:
+        preview += "..."
+    if references:
+        preview += "\n\n" + "\n".join(f"[{key}]: {url}" for key, url in references)
+    return preview
+
 def display_name(pkg_name: str, aliases: dict[str, str]) -> str:
     return aliases.get(pkg_name, pkg_name)
 
 
-def render(updates, changelogs, group_releases=None, absorbed=None) -> None:
+def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases=None, absorbed=None) -> None:
+    cache = load_github_repo_cache()
+    token = load_github_token()
     absorbed = absorbed or set()
     aliases = load_aliases()
     pkg_info = get_package_info()  # una sola llamada, se usa en toda la función
@@ -71,17 +88,15 @@ def render(updates, changelogs, group_releases=None, absorbed=None) -> None:
             if u.change_type is ChangeType.VERSION:
                 marker = BUMP_ICONS.get(u.version_bump, "🆕 " if u.is_new else "🟢 ")
                 console.print(f"{marker}{name} {u.old_pkgver} → {u.new_pkgver}")
-                _print_detail(u)
+                if category == "system":
+                    _print_detail(u)
                 
-                changelog = changelogs.get(u.name)
+                changelog = resolve_one_changelog(u, sources, cache, token)  # <- aquí, uno a uno
                 if changelog:
                     if changelog["type"] == "text":
-                        # recortamos a un tamaño razonable para no inundar la terminal
-                        preview = changelog["body"][:400]
-                        if len(changelog["body"]) > 400:
-                            preview += "..."
+                        preview = safe_markdown_preview(changelog["body"])
                         console.print("   📝 [bold]Notas de la versión:[/bold]")
-                        console.print(Markdown(changelog["body"][:600]))
+                        console.print(Markdown(preview))
                         console.print(f"   [dim]{changelog['url']}[/dim]")
                     else:
                         console.print(f"   [dim]📝 Notas de versión: {changelog['url']}[/dim]")

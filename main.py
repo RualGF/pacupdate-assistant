@@ -18,7 +18,8 @@ def main() -> None:
     groups = get_package_groups()
     group_releases, absorbed = detect_group_releases(updates, groups)
 
-    render(updates, changelogs, group_releases, absorbed)
+    sources = load_packages_sources()
+    render(updates, sources, group_releases, absorbed)
 
 
 if __name__ == "__main__":

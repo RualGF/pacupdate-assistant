@@ -5,6 +5,7 @@ from cache import load_seen_packages, save_seen_packages, load_github_repo_cache
 from github import discover_github_repo, verify_repo, fetch_release_notes, is_trustworthy
 from models import PackageUpdate, ChangeType, VersionBump
 from collections import defaultdict
+from typing import Optional
 
 import gitlab
 
@@ -134,3 +135,25 @@ def get_aur_updates() -> list[PackageUpdate]:
             new_pkgver=new_pkgver, new_pkgrel=new_pkgrel,
         ))
     return result
+
+def resolve_one_changelog(u: PackageUpdate, sources: dict, cache: dict, token: Optional[str]) -> Optional[dict]:
+    if not u.known or u.change_type is not ChangeType.VERSION:
+        return None
+
+    raw_source = sources.get(u.name, "")
+    if raw_source.startswith("github:"):
+        return fetch_release_notes(raw_source.split(":", 1)[1], u.new_pkgver, token)
+    elif raw_source.startswith("gitlab-self:"):
+        _, host, project = raw_source.split(":", 2)
+        return gitlab.fetch_release_notes(project, u.new_pkgver, host=host)
+    elif raw_source.startswith("gitlab:"):
+        return gitlab.fetch_release_notes(raw_source.split(":", 1)[1], u.new_pkgver)
+    elif raw_source.startswith("link:"):
+        return {"type": "link", "url": raw_source.split(":", 1)[1]}
+    elif raw_source == "mozilla" and u.name in MOZILLA_URLS:
+        return {"type": "link", "url": MOZILLA_URLS[u.name].format(version=u.new_pkgver)}
+    else:
+        entry = cache.get(u.name)
+        if entry and entry["repo"] and is_trustworthy(entry["confidence"]):
+            return fetch_release_notes(entry["repo"], u.new_pkgver, token)
+    return None
