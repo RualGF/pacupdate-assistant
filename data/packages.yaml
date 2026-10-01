@@ -13,7 +13,7 @@ applications:
     source: "link:https://store.steampowered.com/news/"
 
   discord:
-    source: "link:https://discord.com/release-notes"
+    source: "link:https://discord.com/tags/patch-notes"
 
   qbittorrent:
     source: "github:qbittorrent/qBittorrent"
@@ -67,6 +67,7 @@ applications:
     source: "github:libretro/RetroArch"
   
   keepassxc: {}
+  teams-for-linux: {}
 
 tools:
   python:
@@ -100,7 +101,8 @@ tools:
     source: "github:docker/cli"
 
   cachyos-settings: {}
-  nvidia-settings: {}
+  cachyos-gaming-applications: {}
+  nvidia-settings: {source: github:NVIDIA/open-gpu-kernel-modules}
   plocate: {}
   cpupower: {}
   obsidian: {}
@@ -108,12 +110,20 @@ tools:
   ark: {}
   filelight: {}
   kate: {}
-  konsole: {}
   kwalletmanager: {}
   networkmanager: {}
+  vim: {}
+  man-pages: {}
+  7zip: {}
+  nvidia-utils: {source: github:NVIDIA/open-gpu-kernel-modules}
+  opencl-nvidia: {source: github:NVIDIA/open-gpu-kernel-modules}
+  snapper: {}
+  mariadb: {}
+  grub: {}
+  git: {}
 
 drivers:
-  nvidia: {source: "link:https://www.nvidia.com/en-us/drivers/unix/"}
+  nvidia: {source: github:NVIDIA/open-gpu-kernel-modules}
   linux: {source: kernel.org}
   mesa: {source: mesa}
   linux-cachyos:
@@ -128,27 +138,48 @@ drivers:
     source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos-lts"
   linux-cachyos-lts-nvidia-open:
     source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos-lts"
+  hplip: {}
 
 desktop:
   plasma-desktop: {}
   kwin: {}
   dolphin: {}
   wayland: {}
+  konsole: {}
+  fish: {}
+  foot: {}
+  terminator: {}
+  yakuake: {}
+  rio: {}
+  kitty: {}
+  bash: {}
+  nushell: {}
 
 libraries:
+
   libtorrent-rasterbar: {}
   libreoffice-fresh-es: {}
   thunderbird-i18n-es-es: {}
   lib32-fontconfig: {}
   lib32-libffi: {}
+  lib32-nvidia-utils: {source: github:NVIDIA/open-gpu-kernel-modules}
+  lib32-opencl-nvidia: {source: github:NVIDIA/open-gpu-kernel-modules}
   libffi: {}
-  libxnvctrl: {}
+  libxnvctrl: {source: github:NVIDIA/open-gpu-kernel-modules}
   lib32-expat: {}
   docker-compose: {}
   dolphin-plugins: {}
+  libretro-mame: {}
+  libretro-melonds: {}
+  libretro-ppsspp: {}
+  libretro-snes9x: {}
 
 
 python:
+  python-numpy: {}
+  python-numpydoc: {source: "link:https://numpydoc.readthedocs.io/en/latest/release/"}
+  python-pandas: {}
+  python-matplotlib: {}
   python-levenshtein: {}
   python-typing-inspection: {}
   python-curl_cffi: {}
@@ -160,7 +191,27 @@ python:
   python-shtab: {}
   python-lsp-ruff: {}
   python-scipy: {}
+  python-orjson: {}
+  python-evdev: {}
+  python-pygithub: {}
+  python-ruff: {}
   python-zope-interface:
     source: "link:https://github.com/zopefoundation/zope.interface/blob/master/CHANGES.rst"
+  python-spyder-kernels: {}
+  python-imagesize: {}
+  python-parso: {}
+  python-pydantic: {}
+  python-ujson: {}
+  python-greenlet: {}
+  python-ipykernel: {}
+  opencv: {}
+  python-jupyter-client: {}
+  python-jupyterlab-server: {}
+  ipython:
+    source: "link:https://ipython.readthedocs.io/en/stable/whatsnew/version9.html"
   jupyter-notebook: {}
   jupyterlab: {}
+  jupyter-server: {}
+  php: {}
+  ruff: {}
+  

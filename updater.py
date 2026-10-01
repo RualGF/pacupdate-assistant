@@ -17,17 +17,8 @@ MOZILLA_URLS = {
 MIN_GROUP_SIZE = 5  # umbral para considerar que es un release real, no casualidad
 
 def get_updates() -> list[PackageUpdate]:
-    updates = parse_checkupdates(run_checkupdates())
-    packages_map = load_packages_map()
-    seen = load_seen_packages()
 
-    for u in updates:
-        u.category = packages_map.get(u.name, "system")
-        u.known = u.name in packages_map
-        u.is_new = u.name not in seen
-
-    save_seen_packages(seen | {u.name for u in updates})
-    return updates
+    return parse_checkupdates(run_checkupdates())
 
 def resolve_github_repos(updates: list[PackageUpdate], pkg_info: dict[str, PackageInfo]) -> None:
     """Solo intenta descubrir repo para paquetes conocidos o recién detectados, nunca para todo el sistema."""
@@ -157,3 +148,10 @@ def resolve_one_changelog(u: PackageUpdate, sources: dict, cache: dict, token: O
         if entry and entry["repo"] and is_trustworthy(entry["confidence"]):
             return fetch_release_notes(entry["repo"], u.new_pkgver, token)
     return None
+
+def classify_updates(updates: list[PackageUpdate], seen: set[str]) -> None:
+    packages_map = load_packages_map()
+    for u in updates:
+        u.category = packages_map.get(u.name, "system")
+        u.known = u.name in packages_map
+        u.is_new = u.name not in seen

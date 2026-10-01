@@ -770,5 +770,1717 @@
   "wayland": {
     "repo": null,
     "confidence": "low"
+  },
+  "curl-impersonate": {
+    "repo": "lexiforest/curl-impersonate",
+    "confidence": "high"
+  },
+  "fontconfig": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-fontconfig": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-libffi": {
+    "repo": "libffi/libffi",
+    "confidence": "high"
+  },
+  "lib32-nspr": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-p11-kit": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libffi": {
+    "repo": "libffi/libffi",
+    "confidence": "high"
+  },
+  "libp11-kit": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libtorrent-rasterbar": {
+    "repo": "arvidn/libtorrent",
+    "confidence": "high"
+  },
+  "nspr": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "p11-kit": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-levenshtein": {
+    "repo": "rapidfuzz/Levenshtein",
+    "confidence": "high"
+  },
+  "python-typing-inspection": {
+    "repo": "pydantic/typing-inspection",
+    "confidence": "high"
+  },
+  "python-curl_cffi": {
+    "repo": "lexiforest/curl_cffi",
+    "confidence": "high"
+  },
+  "python-platformdirs": {
+    "repo": "tox-dev/platformdirs",
+    "confidence": "high"
+  },
+  "plocate": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "cachyos-rate-mirrors": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "expat": {
+    "repo": "libexpat/libexpat",
+    "confidence": "medium"
+  },
+  "flatpak": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "glibmm": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "jupyter-notebook": {
+    "repo": "jupyter/notebook",
+    "confidence": "high"
+  },
+  "jupyterlab": {
+    "repo": "jupyterlab/jupyterlab",
+    "confidence": "high"
+  },
+  "lib32-expat": {
+    "repo": "libexpat/libexpat",
+    "confidence": "low"
+  },
+  "sg3_utils": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-xlib": {
+    "repo": "python-xlib/python-xlib",
+    "confidence": "high"
+  },
+  "amd-ucode": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-firmware": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-firmware-amdgpu": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-firmware-atheros": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-firmware-broadcom": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-firmware-cirrus": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-firmware-intel": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-firmware-mediatek": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-firmware-nvidia": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-firmware-other": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-firmware-radeon": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-firmware-realtek": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-firmware-whence": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "nilfs-utils": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-wheel": {
+    "repo": "pypa/wheel",
+    "confidence": "high"
+  },
+  "rsync": {
+    "repo": "RsyncProject/rsync",
+    "confidence": "high"
+  },
+  "tpm2-tss": {
+    "repo": "tpm2-software/tpm2-tss",
+    "confidence": "high"
+  },
+  "wpa_supplicant": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "xdg-dbus-proxy": {
+    "repo": "flatpak/xdg-dbus-proxy",
+    "confidence": "high"
+  },
+  "botan": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "cfitsio": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "exfatprogs": {
+    "repo": "exfatprogs/exfatprogs",
+    "confidence": "high"
+  },
+  "keepassxc": {
+    "repo": "keepassxreboot/keepassxc",
+    "confidence": "high"
+  },
+  "python-cloudpickle": {
+    "repo": "cloudpipe/cloudpickle",
+    "confidence": "high"
+  },
+  "mkinitcpio": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "nodejs": {
+    "repo": "nodejs/node",
+    "confidence": "high"
+  },
+  "python-cryptography": {
+    "repo": "pyca/cryptography",
+    "confidence": "high"
+  },
+  "nano": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "perl-dbi": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "containerd": {
+    "repo": "containerd/containerd",
+    "confidence": "high"
+  },
+  "lib32-libice": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-libxfixes": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-libxrender": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-libxxf86vm": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "php": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "btrfs-assistant": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "confuse": {
+    "repo": "libconfuse/libconfuse",
+    "confidence": "high"
+  },
+  "lib32-libelf": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libopenmpt": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "attica": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "baloo": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "bluez-qt": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "breeze-icons": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "frameworkintegration": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "iproute2": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "karchive": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kauth": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kbookmarks": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kcmutils": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kcodecs": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kcolorscheme": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kcompletion": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kconfig": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kconfigwidgets": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kcontacts": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kcoreaddons": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kcrash": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kdbusaddons": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kdeclarative": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kded": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kdesu": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kdnssd": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kglobalaccel": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kguiaddons": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kholidays": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "ki18n": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kiconthemes": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kidletime": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kimageformats": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kio": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kirigami": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kitemmodels": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kitemviews": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kjobwidgets": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "knewstuff": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "knotifications": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "knotifyconfig": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kpackage": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kparts": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kpeople": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kpty": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kquickcharts": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "krunner": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kservice": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kstatusnotifieritem": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "ksvg": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "ktexteditor": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "ktextwidgets": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kunitconversion": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kuserfeedback": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kwallet": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kwidgetsaddons": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kwindowsystem": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kxmlgui": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libevdev": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libyuv": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "modemmanager-qt": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "networkmanager-qt": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "prison": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "purpose": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-xxhash": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qqc2-desktop-style": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "solid": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "sonnet": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "syndication": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "syntax-highlighting": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "threadweaver": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "boost-libs": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-lxml": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qt6-5compat": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qt6-connectivity": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qt6-translations": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qt6-webchannel": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "webkit2gtk-4.1": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qt6-base": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qt6-declarative": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qt6-imageformats": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qt6-location": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qt6-positioning": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qt6-quick3d": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qt6-quicktimeline": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qt6-shadertools": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qt6-speech": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qt6-svg": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qt6-virtualkeyboard": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qt6-websockets": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libkdcraw": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "perl-uri": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qpdf": {
+    "repo": "qpdf/qpdf",
+    "confidence": "high"
+  },
+  "baloo-widgets": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "gwenview": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kcalc": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kdeconnect": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kio-extras": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "ksanecore": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libkexiv2": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "okular": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "partitionmanager": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "ark": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "dolphin": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "dolphin-plugins": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "filelight": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kaccounts-integration": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kate": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kdegraphics-mobipocket": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kdegraphics-thumbnailers": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kdialog": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kio-admin": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "konsole": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kpmcore": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kwalletmanager": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "markdownpart": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "signon-kwallet-extension": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "skanpage": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-scipy": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-zope-interface": {
+    "repo": "zopefoundation/zope.interface",
+    "confidence": "high"
+  },
+  "abseil-cpp": {
+    "repo": "abseil/abseil-cpp",
+    "confidence": "high"
+  },
+  "jansson": {
+    "repo": "akheron/jansson",
+    "confidence": "high"
+  },
+  "libdeflate": {
+    "repo": "ebiggers/libdeflate",
+    "confidence": "high"
+  },
+  "poppler": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "poppler-glib": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "poppler-qt6": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "archlinux-contrib": {
+    "repo": "archlinux/contrib",
+    "confidence": "high"
+  },
+  "iana-etc": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libmysofa": {
+    "repo": "hoene/libmysofa",
+    "confidence": "high"
+  },
+  "python-orjson": {
+    "repo": "ijl/orjson",
+    "confidence": "high"
+  },
+  "python-prometheus_client": {
+    "repo": "prometheus/client_python",
+    "confidence": "high"
+  },
+  "libblake3": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-evdev": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-idna": {
+    "repo": "kjd/idna",
+    "confidence": "high"
+  },
+  "rio": {
+    "repo": "raphamorim/rio",
+    "confidence": "high"
+  },
+  "python-pygithub": {
+    "repo": "PyGithub/PyGithub",
+    "confidence": "high"
+  },
+  "qt-sudo": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "tealdeer": {
+    "repo": "tealdeer-rs/tealdeer",
+    "confidence": "high"
+  },
+  "vim": {
+    "repo": "vim/vim",
+    "confidence": "medium"
+  },
+  "lib32-openssl": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libcap-ng": {
+    "repo": "stevegrubb/libcap-ng",
+    "confidence": "high"
+  },
+  "libslirp": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lua54": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "openssl": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-filelock": {
+    "repo": "tox-dev/filelock",
+    "confidence": "medium"
+  },
+  "bubblewrap": {
+    "repo": "containers/bubblewrap",
+    "confidence": "high"
+  },
+  "libbluray": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "srt": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "node-gyp": {
+    "repo": "nodejs/node-gyp",
+    "confidence": "high"
+  },
+  "python-curl-adapter": {
+    "repo": "el1s7/curl-adapter",
+    "confidence": "high"
+  },
+  "python-pyzmq": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "aom": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "gnome-autoar": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libcupsfilters": {
+    "repo": "OpenPrinting/libcupsfilters",
+    "confidence": "high"
+  },
+  "man-pages": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "edk2-ovmf": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "faad2": {
+    "repo": "knik0/faad2",
+    "confidence": "high"
+  },
+  "jupyter-server": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-jupyter-client": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-kiwisolver": {
+    "repo": "nucleic/kiwi",
+    "confidence": "high"
+  },
+  "lib32-libgcrypt": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libcloudproviders": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libgcrypt": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libksba": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-importlib-metadata": {
+    "repo": "python/importlib_metadata",
+    "confidence": "high"
+  },
+  "cloudflare-warp-bin": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "discount": {
+    "repo": "Orc/discount",
+    "confidence": "high"
+  },
+  "orc": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "enchant": {
+    "repo": "gnulib-modules/bootstrap",
+    "confidence": "low"
+  },
+  "libcdio": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libvpx": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-websocket-client": {
+    "repo": "websocket-client/websocket-client",
+    "confidence": "high"
+  },
+  "exiv2": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "fd": {
+    "repo": "sharkdp/fd",
+    "confidence": "high"
+  },
+  "imlib2": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libnautilus-extension": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libwireplumber": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "nautilus": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-aiohappyeyeballs": {
+    "repo": "aio-libs/aiohappyeyeballs",
+    "confidence": "high"
+  },
+  "python-asttokens": {
+    "repo": "gristlabs/asttokens",
+    "confidence": "high"
+  },
+  "python-imagesize": {
+    "repo": "shibukawa/imagesize_py",
+    "confidence": "high"
+  },
+  "python-parso": {
+    "repo": "davidhalter/parso",
+    "confidence": "high"
+  },
+  "python-rapidfuzz": {
+    "repo": "rapidfuzz/RapidFuzz",
+    "confidence": "high"
+  },
+  "python-roman-numerals-py": {
+    "repo": "AA-Turner/roman-numerals",
+    "confidence": "high"
+  },
+  "python-send2trash": {
+    "repo": "hsoft/send2trash",
+    "confidence": "high"
+  },
+  "spyder": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "wireplumber": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "ipython": {
+    "repo": "ipython/ipython",
+    "confidence": "medium"
+  },
+  "python-spyder-kernels": {
+    "repo": "spyder-ide/spyder-kernels",
+    "confidence": "high"
+  },
+  "ada": {
+    "repo": "ada-url/ada",
+    "confidence": "high"
+  },
+  "gtest": {
+    "repo": "google/googletest",
+    "confidence": "high"
+  },
+  "kquickimageeditor": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libvips": {
+    "repo": "libvips/libvips",
+    "confidence": "high"
+  },
+  "localsearch": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-fonttools": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-wcwidth": {
+    "repo": "jquast/wcwidth",
+    "confidence": "high"
+  },
+  "libnice": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "man-pages-es": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-pcre2": {
+    "repo": "PCRE2Project/pcre2",
+    "confidence": "high"
+  },
+  "libunwind": {
+    "repo": "libunwind/libunwind",
+    "confidence": "high"
+  },
+  "pcre2": {
+    "repo": "PCRE2Project/pcre2",
+    "confidence": "high"
+  },
+  "jsoncpp": {
+    "repo": "open-source-parsers/jsoncpp",
+    "confidence": "high"
+  },
+  "libcgif": {
+    "repo": "dloebl/cgif",
+    "confidence": "high"
+  },
+  "libde265": {
+    "repo": "strukturag/libde265",
+    "confidence": "high"
+  },
+  "curl": {
+    "repo": "curl/curl",
+    "confidence": "medium"
+  },
+  "fish-pure-prompt": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "foot": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "foot-terminfo": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "gpgme": {
+    "repo": "gpg/gpgme",
+    "confidence": "high"
+  },
+  "gpgmepp": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-curl": {
+    "repo": "curl/curl",
+    "confidence": "medium"
+  },
+  "lib32-util-linux": {
+    "repo": "util-linux/util-linux",
+    "confidence": "high"
+  },
+  "libnftnl": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "nftables": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-anyio": {
+    "repo": "agronholm/anyio",
+    "confidence": "high"
+  },
+  "util-linux": {
+    "repo": "util-linux/util-linux",
+    "confidence": "high"
+  },
+  "util-linux-libs": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "vapoursynth": {
+    "repo": "vapoursynth/vapoursynth",
+    "confidence": "high"
+  },
+  "vid.stab": {
+    "repo": "georgmartius/vid.stab",
+    "confidence": "high"
+  },
+  "zvbi": {
+    "repo": "zapping-vbi/zvbi",
+    "confidence": "high"
+  },
+  "7zip": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "adwaita-fonts": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "fish": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-libxml2": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libretro-mame": {
+    "repo": "libretro/mame",
+    "confidence": "medium"
+  },
+  "libretro-melonds": {
+    "repo": "libretro/melonDS",
+    "confidence": "medium"
+  },
+  "libretro-ppsspp": {
+    "repo": "hrydgard/ppsspp",
+    "confidence": "medium"
+  },
+  "libretro-snes9x": {
+    "repo": "libretro/snes9x",
+    "confidence": "medium"
+  },
+  "libxml2": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "perl-lwp-mediatypes": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-pygments": {
+    "repo": "pygments/pygments",
+    "confidence": "high"
+  },
+  "python-superqt": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "scx-scheds": {
+    "repo": "sched-ext/scx",
+    "confidence": "high"
+  },
+  "scx-tools": {
+    "repo": "sched-ext/scx-loader",
+    "confidence": "high"
+  },
+  "teams-for-linux": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "winboat": {
+    "repo": "TibixDev/winboat",
+    "confidence": "high"
+  },
+  "xterm": {
+    "repo": "ThomasDickey/xterm-snapshots",
+    "confidence": "high"
+  },
+  "egl-gbm": {
+    "repo": "NVIDIA/egl-gbm",
+    "confidence": "high"
+  },
+  "sdl2-compat": {
+    "repo": "libsdl-org/sdl2-compat",
+    "confidence": "high"
+  },
+  "taglib": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "egl-wayland": {
+    "repo": "NVIDIA/egl-wayland",
+    "confidence": "high"
+  },
+  "egl-wayland2": {
+    "repo": "NVIDIA/egl-wayland2",
+    "confidence": "high"
+  },
+  "egl-x11": {
+    "repo": "NVIDIA/egl-x11",
+    "confidence": "high"
+  },
+  "libpathrs": {
+    "repo": "cyphar/libpathrs",
+    "confidence": "high"
+  },
+  "libva-nvidia-driver": {
+    "repo": "elFarto/nvidia-vaapi-driver",
+    "confidence": "high"
+  },
+  "python-cattrs": {
+    "repo": "python-attrs/cattrs",
+    "confidence": "high"
+  },
+  "python-charset-normalizer": {
+    "repo": "Ousret/charset_normalizer",
+    "confidence": "high"
+  },
+  "python-jedi": {
+    "repo": "davidhalter/jedi",
+    "confidence": "high"
+  },
+  "python-pydantic": {
+    "repo": "pydantic/pydantic",
+    "confidence": "high"
+  },
+  "terminator": {
+    "repo": "gnome-terminator/terminator",
+    "confidence": "high"
+  },
+  "leancrypto": {
+    "repo": "smuellerDD/leancrypto",
+    "confidence": "high"
+  },
+  "libpcap": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-pydantic-core": {
+    "repo": "pydantic/pydantic-core",
+    "confidence": "medium"
+  },
+  "libwacom": {
+    "repo": "linuxwacom/libwacom",
+    "confidence": "high"
+  },
+  "vscodium": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "wireless-regdb": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "fuse-common": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "fuse3": {
+    "repo": "libfuse/libfuse",
+    "confidence": "high"
+  },
+  "unrar": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "yakuake": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "gtk-update-icon-cache": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "gtk4": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-pandas": {
+    "repo": "pandas-dev/pandas",
+    "confidence": "high"
+  },
+  "ghostscript": {
+    "repo": "ArtifexSoftware/ghostpdl-downloads",
+    "confidence": "low"
+  },
+  "strace": {
+    "repo": "strace/strace",
+    "confidence": "high"
+  },
+  "sysstat": {
+    "repo": "sysstat/sysstat",
+    "confidence": "high"
+  },
+  "lib32-xz": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "liburcu": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-pint": {
+    "repo": "hgrecco/pint",
+    "confidence": "high"
+  },
+  "rdma-core": {
+    "repo": "linux-rdma/rdma-core",
+    "confidence": "high"
+  },
+  "yyjson": {
+    "repo": "ibireme/yyjson",
+    "confidence": "high"
+  },
+  "python-contourpy": {
+    "repo": "contourpy/contourpy",
+    "confidence": "high"
+  },
+  "upower": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "ddcutil": {
+    "repo": "rockowitz/ddcutil",
+    "confidence": "high"
+  },
+  "libldap": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libportal": {
+    "repo": "flatpak/libportal",
+    "confidence": "high"
+  },
+  "libportal-gtk4": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-pyjwt": {
+    "repo": "jpadilla/pyjwt",
+    "confidence": "high"
+  },
+  "gcr-4": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-libldap": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libtirpc": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "luit": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "pyalpm": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "tzdata": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "haskell-asciidoc": {
+    "repo": "jgm/asciidoc-hs.git",
+    "confidence": "low"
+  },
+  "haskell-http2": {
+    "repo": "kazu-yamamoto/http2",
+    "confidence": "high"
+  },
+  "libcpuid": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libfreehand": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "pahole": {
+    "repo": "libbpf/libbpf",
+    "confidence": "low"
+  },
+  "python-numpydoc": {
+    "repo": "numpy/numpydoc",
+    "confidence": "high"
+  },
+  "python-ujson": {
+    "repo": "ultrajson/ultrajson",
+    "confidence": "high"
+  },
+  "iniparser": {
+    "repo": "ndevilla/iniparser",
+    "confidence": "high"
+  },
+  "libmaxminddb": {
+    "repo": "maxmind/libmaxminddb",
+    "confidence": "high"
+  },
+  "python-greenlet": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-jupyterlab-server": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "snapper": {
+    "repo": "openSUSE/snapper",
+    "confidence": "high"
+  },
+  "svt-av1": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libsecret": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "hplip": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-firmware-amd": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "linux-firmware-ti": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libinput": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "pulseaudio-qt": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "rpcbind": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "pv": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libnfs": {
+    "repo": "sahlberg/libnfs",
+    "confidence": "high"
+  },
+  "opencv": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "vmaf": {
+    "repo": "Netflix/vmaf",
+    "confidence": "high"
+  },
+  "xxhash": {
+    "repo": "Cyan4973/xxHash",
+    "confidence": "high"
+  },
+  "gzip": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "less": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "mujs": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "nautilus-python": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "pcsclite": {
+    "repo": "LudovicRousseau/PCSC",
+    "confidence": "medium"
+  },
+  "perl-html-parser": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-pyparsing": {
+    "repo": "pyparsing/pyparsing",
+    "confidence": "medium"
+  },
+  "readline": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "thin-provisioning-tools": {
+    "repo": "jthornber/thin-provisioning-tools",
+    "confidence": "high"
+  },
+  "alsa-card-profiles": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "gst-plugin-pipewire": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-libpipewire": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-pipewire": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libpipewire": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "pipewire": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "pipewire-alsa": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "pipewire-audio": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "pipewire-pulse": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-flake8": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-pycodestyle": {
+    "repo": "PyCQA/pycodestyle",
+    "confidence": "high"
+  },
+  "sof-firmware": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "openjph": {
+    "repo": "aous72/OpenJPH",
+    "confidence": "high"
+  },
+  "grub": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "parted": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kitty": {
+    "repo": "kovidgoyal/kitty",
+    "confidence": "high"
+  },
+  "kitty-shell-integration": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "kitty-terminfo": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-pyflakes": {
+    "repo": "PyCQA/pyflakes",
+    "confidence": "high"
+  },
+  "bash": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "cairo": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "fribidi": {
+    "repo": "fribidi/fribidi",
+    "confidence": "high"
+  },
+  "lib32-cairo": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-fribidi": {
+    "repo": "fribidi/fribidi",
+    "confidence": "high"
+  },
+  "libntfs-3g": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "ntfs-3g": {
+    "repo": "tuxera/ntfs-3g",
+    "confidence": "medium"
+  },
+  "runc": {
+    "repo": "opencontainers/runc",
+    "confidence": "high"
+  },
+  "jdk17-openjdk": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "nushell": {
+    "repo": "nushell/nushell",
+    "confidence": "high"
+  },
+  "automake": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "qbittorrent": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-librsvg": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "lib32-libpng": {
+    "repo": "pnggroup/libpng",
+    "confidence": "medium"
+  },
+  "libgsf": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libpng": {
+    "repo": "pnggroup/libpng",
+    "confidence": "medium"
+  },
+  "librsvg": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "libsrtp": {
+    "repo": "cisco/libsrtp",
+    "confidence": "high"
+  },
+  "pangomm-2.48": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-ipykernel": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "wolfssl": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "cifs-utils": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "gdb": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "gdb-common": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "git": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "pam": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "python-pycurl": {
+    "repo": "pycurl/pycurl",
+    "confidence": "high"
+  },
+  "cachyos-gaming-applications": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "hwdetect": {
+    "repo": null,
+    "confidence": "low"
+  },
+  "emulationstation-de": {
+    "repo": null,
+    "confidence": "low"
   }
 }
