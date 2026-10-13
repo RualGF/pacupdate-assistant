@@ -20,6 +20,8 @@ CATEGORY_TITLES = {
     "system": "⚙️  Sistema",
 }
 CATEGORY_ORDER = ["applications", "tools", "drivers", "desktop", "libraries", "python", "system"]
+GROUP_TITLES = {"kf6": "KDE Frameworks"}
+GROUP_URLS = {"kf6": "https://kde.org/announcements/frameworks/{major}/{version}/"}
 
 BUMP_ICONS = {
     VersionBump.MAJOR: "🔴 ",     # se deja un espacio al final para que no quede pegado
@@ -110,6 +112,21 @@ def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases
             console.print(f"{marker}Paquetes de Plasma {rel['old']} → {rel['new']} ({rel['count']} paquetes más)")
             major = rel["new"].split(".")[0]
             console.print(f"   [dim]https://kde.org/es/announcements/plasma/{major}/{rel['new']}/[/dim]")
+    
+    otros = [r for r in (group_releases or []) if r["group"] != "plasma"]
+    if otros:
+        console.print(f"[bold]{'─' * 50}[/bold]")
+        console.print("[bold]📦 Lanzamientos en bloque[/bold]")
+        console.print(f"[bold]{'─' * 50}[/bold]")
+
+        for rel in otros:
+            marker = BUMP_ICONS.get(rel["bump"], "🟢 ")
+            title = GROUP_TITLES.get(rel["group"], rel["group"])
+            console.print(f"{marker}{title} {rel['old']} → {rel['new']} ({rel['count']} paquetes)")
+            template = GROUP_URLS.get(rel["group"])
+            if template:
+                major = rel["new"].split(".")[0]
+                console.print(f"   [dim]{template.format(major=major, version=rel['new'])}[/dim]")
             
     if to_classify:
         console.print(f"[bold]{'─' * 50}[/bold]")
