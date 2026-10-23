@@ -128,10 +128,13 @@ def get_aur_updates() -> list[PackageUpdate]:
     return result
 
 def resolve_one_changelog(u: PackageUpdate, sources: dict, cache: dict, token: Optional[str]) -> Optional[dict]:
-    if not u.known or u.change_type is not ChangeType.VERSION:
+    if not u.known:
         return None
 
     raw_source = sources.get(u.name, "")
+    if u.change_type is not ChangeType.VERSION and not raw_source.startswith("link:"):
+        return None
+    
     if raw_source.startswith("github:"):
         return fetch_release_notes(raw_source.split(":", 1)[1], u.new_pkgver, token)
     elif raw_source.startswith("gitlab-self:"):

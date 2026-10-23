@@ -1,5 +1,6 @@
 import requests
 import re
+import sys
 from typing import Optional
 
 GITHUB_REPO_RE = re.compile(r"github\.com/([\w.-]+/[\w.-]+?)(?:\.git|/archive|/releases|[\"'])")
@@ -17,6 +18,8 @@ def _extract_repo(pkgbuild_text: str) -> Optional[str]:
 def _fetch(url: str, headers: dict) -> Optional[str]:
     try:
         resp = requests.get(url, headers=headers, timeout=5)
+        if resp.status_code in (401, 403):
+            print(f"⚠ GitHub respondió {resp.status_code}: revisa GITHUB_TOKEN o el límite de peticiones", file=sys.stderr)
         return resp.text if resp.status_code == 200 else None
     except requests.exceptions.RequestException:
         return None  # timeout, error de red, DNS, lo que sea: lo tratamos como "no encontrado"

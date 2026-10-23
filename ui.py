@@ -103,9 +103,10 @@ def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases
                     else:
                         console.print(f"   [dim]📝 Notas de versión: {changelog['url']}[/dim]")
             else:  # solo rebuild, pero es "known" o "new" (si no, no llegaría aquí)
-                console.print(
-                    f"🟡 {name} (pkgrel {u.old_pkgrel}→{u.new_pkgrel})"
-                )
+                console.print(f"🟡 {name} (pkgrel {u.old_pkgrel}→{u.new_pkgrel})")
+                changelog = resolve_one_changelog(u, sources, cache, token)
+                if changelog and changelog["type"] == "link":
+                    console.print(f"   [dim]📝 Notas de versión: {changelog['url']}[/dim]")
     
         for rel in matching_group:
             marker = BUMP_ICONS.get(rel["bump"], "🟢 ")
@@ -148,7 +149,7 @@ def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases
     ]
     if hidden:
         console.print(f"[bold]{'─' * 50}[/bold]")
-        console.print("[dim]⚙️  Rebuilds menores (sin cambio real):[/dim]")
+        console.print("[dim]⚙️  Rebuilds (solo cambia el empaquetado):[/dim]")
         console.print(
             "[dim]" + ", ".join(display_name(u.name, aliases) for u in hidden) + "[/dim]"
         )
