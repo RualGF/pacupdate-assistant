@@ -13,7 +13,7 @@ MOZILLA_URLS = {
     "firefox": "https://www.firefox.com/en-US/firefox/{version}/releasenotes/",
     "thunderbird": "https://www.thunderbird.net/en-US/thunderbird/{version}/releasenotes/",
 }
-
+PLASMA_CHANGELOG = "https://kde.org/announcements/changelogs/plasma/{major}/{old}-{new}/"
 MIN_GROUP_SIZE = 5  # umbral para considerar que es un release real, no casualidad
 
 def get_updates() -> list[PackageUpdate]:

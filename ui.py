@@ -5,6 +5,7 @@ from config import load_aliases, load_github_token
 from pacman import get_package_info
 from updater import resolve_one_changelog
 from cache import load_github_repo_cache
+from updater import PLASMA_CHANGELOG
 
 import re
 
@@ -112,7 +113,9 @@ def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases
             marker = BUMP_ICONS.get(rel["bump"], "🟢 ")
             console.print(f"{marker}Paquetes de Plasma {rel['old']} → {rel['new']} ({rel['count']} paquetes más)")
             major = rel["new"].split(".")[0]
-            console.print(f"   [dim]https://kde.org/es/announcements/plasma/{major}/{rel['new']}/[/dim]")
+            old, new = rel["old"].split(":")[-1], rel["new"].split(":")[-1]
+            console.print(f"   [dim]Anuncio: https://kde.org/es/announcements/plasma/{major}/{new}/[/dim]")
+            console.print(f"   [dim]Changelog: {PLASMA_CHANGELOG.format(major=major, old=old, new=new)}[/dim]")
     
     otros = [r for r in (group_releases or []) if r["group"] != "plasma"]
     if otros:
