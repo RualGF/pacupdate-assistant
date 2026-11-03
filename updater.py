@@ -146,6 +146,10 @@ def resolve_one_changelog(u: PackageUpdate, sources: dict, cache: dict, token: O
         return {"type": "link", "url": raw_source.split(":", 1)[1]}
     elif raw_source == "mozilla" and u.name in MOZILLA_URLS:
         return {"type": "link", "url": MOZILLA_URLS[u.name].format(version=u.new_pkgver)}
+    elif raw_source.startswith("template:"):
+        ver = u.new_pkgver.split(":")[-1]
+        url = raw_source.split(":", 1)[1].format(version=ver, version_dash=ver.replace(".", "-"))
+        return {"type": "link", "url": url}
     else:
         entry = cache.get(u.name)
         if entry and entry["repo"] and is_trustworthy(entry["confidence"]):

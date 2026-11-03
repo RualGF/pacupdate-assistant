@@ -21,8 +21,11 @@ CATEGORY_TITLES = {
     "system": "⚙️  Sistema",
 }
 CATEGORY_ORDER = ["applications", "tools", "drivers", "desktop", "libraries", "python", "system"]
-GROUP_TITLES = {"kf6": "KDE Frameworks"}
-GROUP_URLS = {"kf6": "https://kde.org/announcements/frameworks/{major}/{version}/"}
+GROUP_TITLES = {"kf6": "KDE Frameworks", "kde-applications": "KDE Gear"}
+GROUP_URLS = {
+    "kf6": "https://kde.org/announcements/frameworks/{major}/{version}/",
+    "kde-applications": "https://kde.org/es/announcements/gear/{version}/",
+}
 
 BUMP_ICONS = {
     VersionBump.MAJOR: "🔴 ",     # se deja un espacio al final para que no quede pegado
@@ -31,11 +34,13 @@ BUMP_ICONS = {
 
 REFERENCE_RE = re.compile(r'^\[(\w+)\]:\s*(\S+)', re.MULTILINE)
 
-def safe_markdown_preview(body: str, limit: int = 600) -> str:
+def safe_markdown_preview(body: str, limit: int = 700) -> str:
     references = REFERENCE_RE.findall(body)
-    preview = body[:limit]
     if len(body) > limit:
-        preview += "..."
+        cut = body.rfind("\n", 0, limit)
+        preview = body[: cut if cut > 0 else limit] + "\n..."
+    else:
+        preview = body
     if references:
         preview += "\n\n" + "\n".join(f"[{key}]: {url}" for key, url in references)
     return preview
@@ -129,8 +134,9 @@ def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases
             console.print(f"{marker}{title} {rel['old']} → {rel['new']} ({rel['count']} paquetes)")
             template = GROUP_URLS.get(rel["group"])
             if template:
-                major = rel["new"].split(".")[0]
-                console.print(f"   [dim]{template.format(major=major, version=rel['new'])}[/dim]")
+                version = rel["new"].split(":")[-1]
+                major = version.split(".")[0]
+                console.print(f"   [dim]{template.format(major=major, version=version)}[/dim]")
             
     if to_classify:
         console.print(f"[bold]{'─' * 50}[/bold]")
