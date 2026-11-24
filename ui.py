@@ -70,12 +70,26 @@ def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases
             if resto > 0:
                 texto += f" y {resto} más"
             console.print(f"   [dim]usado por: {texto}[/dim]")
+
+    def _print_changelog(u: PackageUpdate) -> None:
+        changelog = resolve_one_changelog(u, sources, cache, token)
+        if changelog and changelog["type"] == "text":
+            console.print("   📝 [bold]Notas de la versión:[/bold]")
+            console.print(Markdown(safe_markdown_preview(changelog["body"])))
+            if changelog["url"]:
+                console.print(f"   [dim]{changelog['url']}[/dim]")
+        elif changelog and changelog["type"] == "link":
+            console.print(f"   [dim]📝 Notas de versión: {changelog['url']}[/dim]")
+        elif u.change_type is ChangeType.VERSION:
+            console.print("   [dim]Notas oficiales sin confirmar para esta versión.[/dim]")
+            if changelog and changelog["type"] == "reference":
+                console.print(f"   [dim]Referencia de la versión: {changelog['url']}[/dim]")
     
             
-    visible = [u for u in updates if u.visible]
+    visible = [u for u in updates if u.visible and u.name not in absorbed]
      # Separamos los que piden clasificación de los que van a sus categorías normales
     to_classify = [u for u in visible if u.needs_classification]
-    rest = [u for u in visible if not u.needs_classification and u.name not in absorbed]
+    rest = [u for u in visible if not u.needs_classification]
 
     by_category: dict[str, list[PackageUpdate]] = {c: [] for c in CATEGORY_ORDER}
     for u in rest:
@@ -93,26 +107,23 @@ def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases
 
         for u in items:
             name = display_name(u.name, aliases)
-            if u.change_type is ChangeType.VERSION:
+            if u.flatpak_ref:
+                labels = {"user": "usuario", "system": "sistema"}
+                scope = labels.get(u.flatpak_installation, u.flatpak_installation)
+                name = f"{name} (Flatpak · {scope})"
+            if u.flatpak_ref and u.old_pkgver == u.new_pkgver:
+                version = f" {u.new_pkgver}" if u.new_pkgver else ""
+                console.print(f"🟡 {name}{version} (actualización del paquete)")
+            elif u.change_type is ChangeType.VERSION:
                 marker = BUMP_ICONS.get(u.version_bump, "🆕 " if u.is_new else "🟢 ")
-                console.print(f"{marker}{name} {u.old_pkgver} → {u.new_pkgver}")
+                console.print(f"{marker}{name} {u.old_pkgver or 'desconocida'} → {u.new_pkgver or 'desconocida'}")
                 if category == "system":
                     _print_detail(u)
                 
-                changelog = resolve_one_changelog(u, sources, cache, token)  # <- aquí, uno a uno
-                if changelog:
-                    if changelog["type"] == "text":
-                        preview = safe_markdown_preview(changelog["body"])
-                        console.print("   📝 [bold]Notas de la versión:[/bold]")
-                        console.print(Markdown(preview))
-                        console.print(f"   [dim]{changelog['url']}[/dim]")
-                    else:
-                        console.print(f"   [dim]📝 Notas de versión: {changelog['url']}[/dim]")
+                _print_changelog(u)
             else:  # solo rebuild, pero es "known" o "new" (si no, no llegaría aquí)
                 console.print(f"🟡 {name} (pkgrel {u.old_pkgrel}→{u.new_pkgrel})")
-                changelog = resolve_one_changelog(u, sources, cache, token)
-                if changelog and changelog["type"] == "link":
-                    console.print(f"   [dim]📝 Notas de versión: {changelog['url']}[/dim]")
+                _print_changelog(u)
     
         for rel in matching_group:
             marker = BUMP_ICONS.get(rel["bump"], "🟢 ")
@@ -147,6 +158,7 @@ def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases
             marker = BUMP_ICONS.get(u.version_bump, "🆕 " if u.is_new else "🟢 ")
             console.print(f"{marker}{name} {u.old_pkgver} → {u.new_pkgver}")
             _print_detail(u)
+            _print_changelog(u)
         console.print(
             "[dim]Añádelos a packages.yaml para clasificarlos.[/dim]"
         )

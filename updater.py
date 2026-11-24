@@ -1,6 +1,6 @@
 from pacman import run_checkupdates, parse_checkupdates, get_foreign_packages, get_installed_version, PackageInfo, _split_version
 from aur import check_aur_updates
-from config import load_packages_map, load_github_token
+from config import load_release_notes_settings, load_packages_map, load_github_token
 from cache import load_seen_packages, save_seen_packages, load_github_repo_cache, save_github_repo_cache
 from github import discover_github_repo, verify_repo, fetch_release_notes, is_trustworthy
 from models import PackageUpdate, ChangeType, VersionBump
@@ -8,6 +8,7 @@ from collections import defaultdict
 from typing import Optional
 
 import gitlab
+import flatpak
 
 MOZILLA_URLS = {
     "firefox": "https://www.firefox.com/en-US/firefox/{version}/releasenotes/",
@@ -15,14 +16,19 @@ MOZILLA_URLS = {
 }
 PLASMA_CHANGELOG = "https://kde.org/announcements/changelogs/plasma/{major}/{old}-{new}/"
 MIN_GROUP_SIZE = 5  # umbral para considerar que es un release real, no casualidad
+EXPLICIT_SOURCE_PREFIXES = ("github:", "gitlab:", "gitlab-self:", "link:", "template:", "flatpak:")
 
 def get_updates() -> list[PackageUpdate]:
 
     return parse_checkupdates(run_checkupdates())
 
-def resolve_github_repos(updates: list[PackageUpdate], pkg_info: dict[str, PackageInfo]) -> None:
-    """Solo intenta descubrir repo para paquetes conocidos o recién detectados, nunca para todo el sistema."""
-    candidates = [u for u in updates if u.known or u.needs_classification]
+def resolve_github_repos(updates: list[PackageUpdate], pkg_info: dict[str, PackageInfo], sources: dict[str, str]) -> None:
+    candidates = []
+    for update in updates:
+        source = sources.get(update.name, "")
+        if (not update.flatpak_ref and update.change_type is ChangeType.VERSION
+                and source != "mozilla" and not source.startswith(EXPLICIT_SOURCE_PREFIXES)):
+            candidates.append(update)
     if not candidates:
         return
 
@@ -31,7 +37,8 @@ def resolve_github_repos(updates: list[PackageUpdate], pkg_info: dict[str, Packa
     token = load_github_token()
 
     for u in candidates:
-        if u.name in cache:
+        previous = cache.get(u.name, {})
+        if previous.get("repo") or previous.get("version") == u.new_pkgver:
             continue
         info = pkg_info.get(u.name)
         repo = discover_github_repo(
@@ -44,7 +51,7 @@ def resolve_github_repos(updates: list[PackageUpdate], pkg_info: dict[str, Packa
             v = verify_repo(repo, u.name, u.old_version, token)
             cache[u.name] = {"repo": repo, "confidence": v["confidence"]}
         else:
-            cache[u.name] = {"repo": None, "confidence": "low"}
+            cache[u.name] = {"repo": None, "confidence": "low", "version": u.new_pkgver}
 
     save_github_repo_cache(cache)
 
@@ -54,32 +61,9 @@ def get_changelogs(updates: list[PackageUpdate], sources: dict[str, str]) -> dic
     changelogs = {}
 
     for u in updates:
-        if not u.known or u.change_type is not ChangeType.VERSION:
+        if u.change_type is not ChangeType.VERSION:
             continue
-
-        raw_source = sources.get(u.name, "")
-        result = None
-
-        if raw_source.startswith("github:"):
-            repo = raw_source.split(":", 1)[1]
-            result = fetch_release_notes(repo, u.new_pkgver, token)
-        elif raw_source.startswith("gitlab:"):
-            project = raw_source.split(":", 1)[1]
-            result = gitlab.fetch_release_notes(project, u.new_pkgver)
-        elif raw_source.startswith("link:"):
-            result = {"type": "link", "url": raw_source.split(":", 1)[1]}
-        elif raw_source == "mozilla" and u.name in MOZILLA_URLS:
-            url = MOZILLA_URLS[u.name].format(version=u.new_pkgver)
-            result = {"type": "link", "url": url}
-        elif raw_source.startswith("gitlab-self:"):
-            _, host, project = raw_source.split(":", 2)
-            result = gitlab.fetch_release_notes(project, u.new_pkgver, host=host)
-        else:
-            # sin estrategia curada: probamos el repo autodescubierto, si es fiable
-            entry = cache.get(u.name)
-            if entry and entry["repo"] and is_trustworthy(entry["confidence"]):
-                result = fetch_release_notes(entry["repo"], u.new_pkgver, token)
-
+        result = resolve_one_changelog(u, sources, cache, token)
         if result:
             changelogs[u.name] = result
 
@@ -92,7 +76,7 @@ def detect_group_releases(updates: list[PackageUpdate], groups: dict[str, str]) 
     """
     by_group: dict[str, list[PackageUpdate]] = defaultdict(list)
     for u in updates:
-        if u.known or u.change_type is not ChangeType.VERSION:
+        if u.flatpak_ref or u.known or u.change_type is not ChangeType.VERSION:
             continue
         group = groups.get(u.name)
         if group:
@@ -128,20 +112,29 @@ def get_aur_updates() -> list[PackageUpdate]:
     return result
 
 def resolve_one_changelog(u: PackageUpdate, sources: dict, cache: dict, token: Optional[str]) -> Optional[dict]:
-    if not u.known:
-        return None
-
     raw_source = sources.get(u.name, "")
+    if u.flatpak_ref:
+        if u.change_type is not ChangeType.VERSION:
+            return None
+        app_id = u.flatpak_ref.split("/", 1)[0]
+        settings = load_release_notes_settings(u.name) if raw_source == f"flatpak:{app_id}" else {}
+        return flatpak.fetch_release_notes(u, settings)
+
+    if raw_source.startswith("flatpak:"):
+        return None
     if u.change_type is not ChangeType.VERSION and not raw_source.startswith("link:"):
         return None
     
     if raw_source.startswith("github:"):
-        return fetch_release_notes(raw_source.split(":", 1)[1], u.new_pkgver, token)
+        notes_file = load_release_notes_settings(u.name).get("file")
+        return fetch_release_notes(raw_source.split(":", 1)[1], u.new_pkgver, token, notes_file)
     elif raw_source.startswith("gitlab-self:"):
         _, host, project = raw_source.split(":", 2)
-        return gitlab.fetch_release_notes(project, u.new_pkgver, host=host)
+        notes_file = load_release_notes_settings(u.name).get("file")
+        return gitlab.fetch_release_notes(project, u.new_pkgver, host=host, notes_file=notes_file)
     elif raw_source.startswith("gitlab:"):
-        return gitlab.fetch_release_notes(raw_source.split(":", 1)[1], u.new_pkgver)
+        notes_file = load_release_notes_settings(u.name).get("file")
+        return gitlab.fetch_release_notes(raw_source.split(":", 1)[1], u.new_pkgver, notes_file=notes_file)
     elif raw_source.startswith("link:"):
         return {"type": "link", "url": raw_source.split(":", 1)[1]}
     elif raw_source == "mozilla" and u.name in MOZILLA_URLS:
@@ -153,12 +146,13 @@ def resolve_one_changelog(u: PackageUpdate, sources: dict, cache: dict, token: O
     else:
         entry = cache.get(u.name)
         if entry and entry["repo"] and is_trustworthy(entry["confidence"]):
-            return fetch_release_notes(entry["repo"], u.new_pkgver, token)
+            notes_file = load_release_notes_settings(u.name).get("file") if u.known else None
+            return fetch_release_notes(entry["repo"], u.new_pkgver, token, notes_file)
     return None
 
 def classify_updates(updates: list[PackageUpdate], seen: set[str]) -> None:
     packages_map = load_packages_map()
     for u in updates:
-        u.category = packages_map.get(u.name, "system")
+        u.category = packages_map.get(u.name, "applications" if u.flatpak_ref else "system")
         u.known = u.name in packages_map
         u.is_new = u.name not in seen

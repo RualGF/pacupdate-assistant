@@ -52,6 +52,9 @@ class PackageUpdate:
     known: bool = False        # ¿está en packages.yaml?
     is_new: bool = False       # ¿nunca visto antes en cache?
     show_rebuilds: bool = False
+    flatpak_ref: str = ""
+    flatpak_installation: str = ""
+    flatpak_origin: str = ""
 
 
     @property
@@ -69,7 +72,7 @@ class PackageUpdate:
     @property
     def visible(self) -> bool:
         """¿Se debe mostrar en el resumen, o es ruido?"""
-        if self.change_type is ChangeType.VERSION:
+        if self.flatpak_ref or self.change_type is ChangeType.VERSION:
             return True
         
         return self.known or self.is_new
@@ -83,4 +86,4 @@ class PackageUpdate:
     @property
     def needs_classification(self) -> bool:
         """Cambio real de versión, desconocido, Y la primera vez que lo vemos."""
-        return not self.known and self.is_new and self.change_type is ChangeType.VERSION
+        return not self.flatpak_ref and not self.known and self.is_new and self.change_type is ChangeType.VERSION

@@ -33,3 +33,13 @@ def load_aliases() -> dict[str, str]:
     """Nombre real del paquete -> nombre bonito para mostrar"""
     path = DATA_DIR / "aliases.yaml"
     return yaml.safe_load(path.read_text()) if path.exists() else {}
+
+
+def load_release_notes_settings(name: str) -> dict[str, str]:
+    raw = yaml.safe_load((DATA_DIR / "packages.yaml").read_text())
+    for entries in raw.values():
+        meta = (entries or {}).get(name)
+        if isinstance(meta, dict):
+            settings = meta.get("release_notes")
+            return settings if isinstance(settings, dict) else {}
+    return {}

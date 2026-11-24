@@ -49,7 +49,11 @@ applications:
     source: "github:KDE/okular"  
 
   zoom:
-    source: flatpak
+    source: "flatpak:us.zoom.Zoom"
+    release_notes:
+      format: release-tables
+      url: "https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0061222"
+      platform: Linux
   
   minion:
     source: "link:https://minion.gg/?log"
@@ -102,6 +106,8 @@ tools:
 
   cachyos-settings: {}
   cachyos-gaming-applications: {}
+  cachyos-packageinstaller:
+    source: "github:CachyOS/packageinstaller"
   nvidia-settings: {source: github:NVIDIA/open-gpu-kernel-modules}
   plocate: {}
   cpupower: {}

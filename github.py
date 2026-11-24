@@ -1,7 +1,11 @@
+import json
 import requests
 import re
 import sys
 from typing import Optional
+from urllib.parse import quote, urlencode
+
+from release_notes import find_file_notes, matching_tag, published_notes
 
 GITHUB_REPO_RE = re.compile(r"github\.com/([\w.-]+/[\w.-]+?)(?:\.git|/archive|/releases|[\"'])")
 URL_FIELD_RE = re.compile(r'^\s*url\s*=\s*["\']?(https?://github\.com/([\w.-]+/[\w.-]+?))/?["\']?\s*$', re.MULTILINE)
@@ -50,13 +54,9 @@ def verify_repo(repo: str, pkgname: str, known_version: Optional[str], token: Op
 
     if known_version:
         headers = {"Authorization": f"Bearer {token}"} if token else {}
-        text = _fetch(f"https://api.github.com/repos/{repo}/tags", headers)
-        if text:
-            import json
-            tags = [t["name"] for t in json.loads(text)]
-            # limpiamos el pkgrel/epoch de la versión instalada para comparar solo el pkgver
-            version_core = known_version.split("-")[0].split(":")[-1]
-            checks["version_found"] = any(version_core in tag for tag in tags)
+        tags = _fetch_json(f"https://api.github.com/repos/{repo}/tags", headers) or []
+        version_core = known_version.rsplit("-", 1)[0].split(":")[-1]
+        checks["version_found"] = any(matching_tag(tag["name"], version_core, repo_project) for tag in tags)
 
     # version_found es la señal fuerte: por sí sola ya basta para "high".
     # name_similarity solo desempata cuando no pudimos verificar versión.
@@ -72,33 +72,57 @@ def verify_repo(repo: str, pkgname: str, known_version: Optional[str], token: Op
 def is_trustworthy(confidence: str) -> bool:
     return confidence in ("high", "medium")
 
-def fetch_release_notes(repo: str, version: str, token: Optional[str]) -> Optional[dict]:
-    """
-    Busca el release de GitHub que corresponde a la nueva versión.
-    Devuelve {'type': 'text', 'body': ..., 'url': ...} si hay notas,
-    o {'type': 'link', 'url': ...} si el release existe pero sin cuerpo de texto,
-    o None si no se encuentra ningún release que matchee la versión.
-    """
+def _fetch_json(url: str, headers: dict):
+    try:
+        return json.loads(_fetch(url, headers) or "null")
+    except ValueError:
+        return None
+
+
+def fetch_release_notes(repo: str, version: str, token: Optional[str], notes_file: str | None = None) -> Optional[dict]:
     headers = {"Authorization": f"Bearer {token}"} if token else {}
-    version_core = version.split("-")[0].split(":")[-1]    
-    text = _fetch(f"https://api.github.com/repos/{repo}/releases?per_page=100", headers)
-    if text:
-        import json
-        for release in json.loads(text):
-            tag = release.get("tag_name") or ""
-            if version_core in tag:
-                body = (release.get("body") or "").strip().replace("\r\n", "\n")
-                url = release.get("html_url", "")
-                if body:
-                    return {"type": "text", "body": body, "url": url}
-                return {"type": "link", "url": url}
+    version = version.split(":")[-1]
+    if not version:
+        return None
+    project = repo.rsplit("/", 1)[-1]
+    api = f"https://api.github.com/repos/{repo}"
+    web = f"https://github.com/{repo}"
 
-    tags_text = _fetch(f"https://api.github.com/repos/{repo}/tags?per_page=100", headers)
-    if tags_text:
-        import json
-        for t in json.loads(tags_text):
-            tag = t.get("name", "")
-            if version_core in tag:
-                return {"type": "link", "url": f"https://github.com/{repo}/releases/tag/{tag}"}
+    releases = _fetch_json(f"{api}/releases?per_page=100", headers)
+    if not isinstance(releases, list):
+        return None
+    release = next((item for item in releases if matching_tag(item.get("tag_name") or "", version, project)), None)
+    if release is None:
+        tags = _fetch_json(f"{api}/tags?per_page=100", headers) or []
+        tag = next((item["name"] for item in tags if matching_tag(item["name"], version, project)), None)
+        if tag:
+            release = _fetch_json(f"{api}/releases/tags/{quote(tag, safe='')}", headers)
+        else:
+            for candidate in (f"v{version}", version):
+                if _fetch_json(f"{api}/git/ref/tags/{quote(candidate, safe='')}", headers):
+                    tag = candidate
+                    release = _fetch_json(f"{api}/releases/tags/{quote(tag, safe='')}", headers)
+                    break
+    else:
+        tag = release["tag_name"]
+    if not tag:
+        return None
 
-    return None
+    ref = quote(tag, safe="")
+    url = f"{web}/tree/{ref}"
+    if release:
+        url = release.get("html_url") or url
+        body = published_notes(release.get("body"))
+        if body:
+            return {"type": "text", "body": body, "url": url}
+
+    def list_files():
+        tree = _fetch_json(f"{api}/git/trees/{ref}?recursive=1", headers) or {}
+        return (item["path"] for item in tree.get("tree", []) if item["type"] == "blob" and item.get("size", 0) <= 1_000_000)
+
+    def read_file(path):
+        query = urlencode({"ref": tag})
+        return _fetch(f"{api}/contents/{quote(path)}?{query}", {**headers, "Accept": "application/vnd.github.raw+json"})
+
+    result = find_file_notes(version, notes_file, list_files, read_file, lambda path: f"{web}/blob/{ref}/{quote(path)}")
+    return result or {"type": "reference", "url": url}
