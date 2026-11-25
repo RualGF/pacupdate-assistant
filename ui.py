@@ -21,6 +21,7 @@ CATEGORY_TITLES = {
     "gaming": "🎮 Juegos y compatibilidad",
     "tools": "🛠️ Herramientas del sistema",
     "drivers": "🔌 Kernel y controladores",
+    "flatpak-runtimes": "🧩 Runtimes y extensiones Flatpak",
     "libraries": "🔧 Bibliotecas",
     "system": "⚙️  Sistema",
 }
@@ -157,10 +158,17 @@ def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases
         for u in items:
             name = display_name(u.name, aliases)
             if u.flatpak_ref:
+                if u.flatpak_kind == "runtime" and not u.known:
+                    name = aliases.get(u.name, u.flatpak_name or u.name)
                 labels = {"user": "usuario", "system": "sistema"}
                 scope = labels.get(u.flatpak_installation, u.flatpak_installation)
                 name = f"{name} (Flatpak · {scope})"
-            if u.flatpak_ref and u.old_pkgver == u.new_pkgver:
+            if u.flatpak_ref and u.flatpak_kind == "runtime" and (not u.new_pkgver or u.old_pkgver == u.new_pkgver):
+                branch = u.flatpak_ref.rsplit("/", 1)[-1]
+                kind = "extensión" if u.flatpak_extension else "runtime"
+                console.print(f"🟡 {name} · {kind}, rama {branch}")
+                console.print("   [dim]Sin notas verificadas para esta compilación.[/dim]")
+            elif u.flatpak_ref and u.old_pkgver == u.new_pkgver:
                 version = f" {u.new_pkgver}" if u.new_pkgver else ""
                 console.print(f"🟡 {name}{version} (actualización del paquete)")
             elif u.change_type is ChangeType.VERSION:

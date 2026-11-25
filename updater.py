@@ -162,7 +162,8 @@ def _resolve_one_changelog(u: PackageUpdate, sources: dict, cache: dict, token: 
             return None
         app_id = u.flatpak_ref.split("/", 1)[0]
         settings = load_release_notes_settings(u.name) if raw_source == f"flatpak:{app_id}" else {}
-        key = ("flatpak", u.flatpak_ref, u.flatpak_origin, u.flatpak_installation, settings, u.new_pkgver)
+        ref = f"{u.flatpak_kind}/{u.flatpak_ref}"
+        key = ("flatpak", ref, u.flatpak_origin, u.flatpak_installation, settings, u.new_pkgver)
         notes = _cached_notes(notes_cache, key, partial(flatpak.fetch_release_notes, u, settings))
         return notes or notes_diagnostic(
             "version_missing", "Sin notas para esta versión en AppStream o en la fuente configurada.",
@@ -226,6 +227,10 @@ def shared_notes_parent(source: str) -> str:
 def classify_updates(updates: list[PackageUpdate], seen: set[str]) -> None:
     packages_map = load_packages_map()
     for u in updates:
-        u.category = packages_map.get(u.name, "applications" if u.flatpak_ref else "system")
+        if u.flatpak_ref:
+            default_category = "flatpak-runtimes" if u.flatpak_kind == "runtime" else "applications"
+        else:
+            default_category = "system"
+        u.category = packages_map.get(u.name, default_category)
         u.known = u.name in packages_map
         u.is_new = u.name not in seen

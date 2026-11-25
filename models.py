@@ -59,6 +59,9 @@ class PackageUpdate:
     flatpak_ref: str = ""
     flatpak_installation: str = ""
     flatpak_origin: str = ""
+    flatpak_kind: str = "app"
+    flatpak_name: str = ""
+    flatpak_extension: bool = False
 
 
     @property

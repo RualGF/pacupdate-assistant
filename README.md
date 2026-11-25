@@ -53,8 +53,10 @@ Cada ejecución comprueba las actualizaciones pendientes.
   - `shared:nombre-del-paquete` para paquetes que siguen la versión y las notas
     de otro, como los idiomas de Firefox. Si ambos actualizan a la misma versión,
     el paquete vinculado aparece debajo del principal y se muestran las notas una vez.
-  - Las aplicaciones Flatpak instaladas se detectan automáticamente y las notas
-    se buscan por versión exacta en el catálogo AppStream local de su remoto.
+  - Se detectan las actualizaciones de las aplicaciones, runtimes y extensiones
+    Flatpak instalados. Las notas se buscan por versión exacta en AppStream.
+    Un runtime o extensión que cambia de compilación dentro de la misma rama
+    aparece como tal, con un aviso si faltan notas verificadas.
     Usa `flatpak:ID.de.LaAplicacion` para asignar un nombre y una categoría en este
     archivo. Si la versión es la misma, se muestra como actualización del paquete.
   - Para aplicaciones cuya web publica notas en tablas por plataforma, puedes
