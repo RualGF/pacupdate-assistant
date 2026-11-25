@@ -1,5 +1,4 @@
 applications:
-
   firefox:
     source: mozilla
   
@@ -8,9 +7,6 @@ applications:
 
   thunderbird:
     source: mozilla
-
-  steam:
-    source: "link:https://store.steampowered.com/news/"
 
   discord:
     source: "link:https://discord.com/tags/patch-notes"
@@ -24,29 +20,13 @@ applications:
   claude-desktop:
     source: "link:https://support.claude.com/es/articles/12138966-notas-de-la-version"
   
-  vscodium:
-    source: "link:https://code.visualstudio.com/updates/"
-  
-  zed:
-    source: "github:zed-industries/zed"
-  
   autofirma:
     source: "github:ctt-gob-es/clienteafirma"
-
-  emulationstation-de:
-    source: "gitlab:es-de/emulationstation-de"
-
-  lutris:
-    source: "github:lutris/lutris"
 
   occt:
     source: "link:https://www.ocbase.com/news/"
   
-  spyder:
-    source: "github:spyder-ide/spyder"
-
-  okular:
-    source: "github:KDE/okular"  
+  okular: {}
 
   zoom:
     source: "flatpak:us.zoom.Zoom"
@@ -55,133 +35,73 @@ applications:
       url: "https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0061222"
       platform: Linux
   
-  minion:
-    source: "link:https://minion.gg/?log"
-  
-  kdeconnect:
-    source: "github:KDE/kdeconnect-kde"  
-  
-  goverlay:
-    source: "github:benjamimgois/goverlay"
-  
-  heroic-games-launcher-bin:
-    source: "github:Heroic-Games-Launcher/HeroicGamesLauncher"
-  
-  retroarch:
-    source: "github:libretro/RetroArch"
-  
-  keepassxc: {}
-  teams-for-linux: {}
+  kdeconnect: {}
 
-tools:
-  python:
-    source: "link:https://docs.python.org/3.14/"
-  
-  proton-cachyos-slr:
-    source: "github:CachyOS/proton-cachyos"
+  keepassxc:
+    source: "github:keepassxreboot/keepassxc"
 
-  umu-launcher:
-    source: "github:Open-Wine-Components/umu-launcher"
-  
-  wine:
-    source: "gitlab-self:gitlab.winehq.org:wine/wine"
+  teams-for-linux:
+    source: "github:IsmaelMartinez/teams-for-linux"
 
-  winetricks:
-    source: "github:Winetricks/winetricks"
-  
-  gamescope-nvidia:
-    source: "link:https://github.com/sharkautarch/gamescope/tree/nvidia-fix" 
-  
-  shelly:
-    source: "github:Seafoam-Labs/Shelly-ALPM"
-
-  cachy-update:
-    source: "link:https://github.com/CachyOS/cachy-update/blob/main/CHANGELOG.md"
-  
-  cachyos-hello:
-    source: "github:cachyos/cachyos-welcome"
-  
-  docker:
-    source: "github:docker/cli"
-
-  cachyos-settings: {}
-  cachyos-gaming-applications: {}
-  cachyos-packageinstaller:
-    source: "github:CachyOS/packageinstaller"
-  nvidia-settings: {source: github:NVIDIA/open-gpu-kernel-modules}
-  plocate: {}
-  cpupower: {}
   obsidian: {}
-  flatpak: {}
   ark: {}
   filelight: {}
-  kate: {}
   kwalletmanager: {}
-  networkmanager: {}
-  vim: {}
-  man-pages: {}
-  7zip: {}
-  nvidia-utils: {source: github:NVIDIA/open-gpu-kernel-modules}
-  opencl-nvidia: {source: github:NVIDIA/open-gpu-kernel-modules}
-  snapper: {}
-  mariadb: {}
-  grub: {}
-  git: {}
+  qrca: {}
 
-drivers:
-  nvidia: {source: github:NVIDIA/open-gpu-kernel-modules}
-  linux: {source: kernel.org}
-  mesa: {source: mesa}
-  linux-cachyos:
-    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos"
-  linux-cachyos-headers:
-    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos"
-  linux-cachyos-nvidia-open:
-    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos"
-  linux-cachyos-lts:
-    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos-lts"
-  linux-cachyos-lts-headers:
-    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos-lts"
-  linux-cachyos-lts-nvidia-open:
-    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos-lts"
-  hplip: {}
+  dolphin: {}
 
 desktop:
   plasma-desktop: {}
   kwin: {}
-  dolphin: {}
   wayland: {}
+
+terminals:
   konsole: {}
-  fish: {}
-  foot: {}
-  terminator: {}
-  yakuake: {}
-  rio: {}
-  kitty: {}
+  fish:
+    source: "github:fish-shell/fish-shell"
+  foot:
+    source: "link:https://codeberg.org/dnkl/foot/releases"
+  terminator:
+    source: "github:gnome-terminator/terminator"
+  yakuake:
+    source: "link:https://invent.kde.org/utilities/yakuake/-/blob/master/ChangeLog"
+  rio:
+    source: "github:raphamorim/rio"
+  kitty:
+    source: "link:https://sw.kovidgoyal.net/kitty/changelog/"
   bash: {}
-  nushell: {}
+  nushell:
+    source: "github:nushell/nushell"
+  ghostty:
+    source: "template:https://ghostty.org/docs/install/release-notes/{version_dash}"
 
-libraries:
+development:
+  python:
+    source: "link:https://docs.python.org/3.14/"
 
-  libtorrent-rasterbar: {}
-  libreoffice-fresh-es: {}
-  thunderbird-i18n-es-es: {}
-  lib32-fontconfig: {}
-  lib32-libffi: {}
-  lib32-nvidia-utils: {source: github:NVIDIA/open-gpu-kernel-modules}
-  lib32-opencl-nvidia: {source: github:NVIDIA/open-gpu-kernel-modules}
-  libffi: {}
-  libxnvctrl: {source: github:NVIDIA/open-gpu-kernel-modules}
-  lib32-expat: {}
+  php: {}
+  vscodium:
+    source: "github:VSCodium/vscodium"
+
+  zed:
+    source: "github:zed-industries/zed"
+
+  spyder:
+    source: "github:spyder-ide/spyder"
+
+  kate: {}
+  vim: {}
+  git: {}
+  docker:
+    source: "github:docker/cli"
+
   docker-compose: {}
-  dolphin-plugins: {}
-  libretro-mame: {}
-  libretro-melonds: {}
-  libretro-ppsspp: {}
-  libretro-snes9x: {}
-
-
-python:
+  mariadb:
+    source: "template:https://mariadb.com/docs/release-notes/community-server/{version_series}/{version}"
+  cython:
+    source: "github:cython/cython"
+  python-pip: {}
   python-numpy: {}
   python-numpydoc: {source: "link:https://numpydoc.readthedocs.io/en/latest/release/"}
   python-pandas: {}
@@ -210,14 +130,142 @@ python:
   python-ujson: {}
   python-greenlet: {}
   python-ipykernel: {}
+  python-pytest: {}
+  python-yaml: {}
+  python-lxml: {}
+  python-packaging: {}
   opencv: {}
   python-jupyter-client: {}
   python-jupyterlab-server: {}
+  python-jupyter-builder: {}
+  python-tomlkit: {}
+  python-rpds-py: {}
+  pyalpm: {}
+  python-dateutil: {}
   ipython:
     source: "link:https://ipython.readthedocs.io/en/stable/whatsnew/version9.html"
   jupyter-notebook: {}
   jupyterlab: {}
   jupyter-server: {}
-  php: {}
   ruff: {}
+
+gaming:
+  steam:
+    source: "link:https://store.steampowered.com/news/"
+
+  emulationstation-de:
+    source: "gitlab:es-de/emulationstation-de"
+
+  lutris:
+    source: "github:lutris/lutris"
+
+  minion:
+    source: "link:https://minion.gg/?log"
   
+  goverlay:
+    source: "github:benjamimgois/goverlay"
+  
+  heroic-games-launcher-bin:
+    source: "github:Heroic-Games-Launcher/HeroicGamesLauncher"
+
+  heroic-games-launcher:
+    source: "github:Heroic-Games-Launcher/HeroicGamesLauncher"
+
+  retroarch:
+    source: "github:libretro/RetroArch"
+  
+  faugus-launcher:
+    source: "github:Faugus/faugus-launcher"
+
+  proton-cachyos-slr:
+    source: "github:CachyOS/proton-cachyos"
+
+  umu-launcher:
+    source: "github:Open-Wine-Components/umu-launcher"
+  
+  wine:
+    source: "gitlab-self:gitlab.winehq.org:wine/wine"
+
+  winetricks:
+    source: "github:Winetricks/winetricks"
+  
+  gamescope-nvidia:
+    source: "link:https://github.com/sharkautarch/gamescope/tree/nvidia-fix" 
+  
+  cachyos-gaming-applications: {}
+  libretro-mame: {}
+  libretro-melonds: {}
+  libretro-ppsspp: {}
+  libretro-snes9x: {}
+  libretro-mgba: {}
+
+tools:
+  shelly:
+    source: "github:Seafoam-Labs/Shelly-ALPM"
+
+  cachy-update:
+    source: "link:https://github.com/CachyOS/cachy-update/blob/main/CHANGELOG.md"
+  
+  cachyos-hello:
+    source: "github:cachyos/cachyos-welcome"
+  
+  paru: {}
+  cachyos-settings: {}
+  cachyos-packageinstaller:
+    source: "github:CachyOS/packageinstaller"
+  plocate: {}
+  cpupower: {}
+  flatpak:
+    source: "github:flatpak/flatpak"
+  cryptsetup:
+    source: "template:https://gitlab.com/cryptsetup/cryptsetup/-/blob/v{version}/docs/v{version}-ReleaseNotes"
+  networkmanager: {}
+  man-pages: {}
+  7zip: {}
+  snapper: {}
+  grub: {}
+  chwd: {}
+  openlinkhub:
+    source: "github:jurkovic-nikola/OpenLinkHub"
+
+drivers:
+  nvidia: {source: github:NVIDIA/open-gpu-kernel-modules}
+  linux: {source: kernel.org}
+  mesa: {source: mesa}
+  linux-cachyos:
+    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos"
+  linux-cachyos-headers:
+    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos"
+  linux-cachyos-nvidia-open:
+    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos"
+  linux-cachyos-lts:
+    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos-lts"
+  linux-cachyos-lts-headers:
+    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos-lts"
+  linux-cachyos-lts-nvidia-open:
+    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos-lts"
+  hplip: {}
+
+  nvidia-settings: {source: github:NVIDIA/open-gpu-kernel-modules}
+  nvidia-utils: {source: github:NVIDIA/open-gpu-kernel-modules}
+  opencl-nvidia: {source: github:NVIDIA/open-gpu-kernel-modules}
+
+libraries:
+  gtk4:
+    source: "github:GNOME/gtk"
+    release_notes:
+      file: NEWS
+  libtorrent-rasterbar: {}
+  libreoffice-fresh-es: {}
+  thunderbird-i18n-es-es:
+    source: "shared:thunderbird"
+  firefox-i18n-es-es:
+    source: "shared:firefox"
+  lib32-fontconfig: {}
+  lib32-libffi: {}
+  lib32-nvidia-utils: {source: github:NVIDIA/open-gpu-kernel-modules}
+  lib32-opencl-nvidia: {source: github:NVIDIA/open-gpu-kernel-modules}
+  libffi: {}
+  libxnvctrl: {source: github:NVIDIA/open-gpu-kernel-modules}
+  lib32-expat: {}
+  dolphin-plugins: {}

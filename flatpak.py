@@ -3,17 +3,14 @@ import json
 import os
 import re
 import subprocess
-import sys
 from dataclasses import dataclass, field
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urldefrag
 from xml.etree import ElementTree
 
-import requests
-
 from models import PackageUpdate
-from release_notes import appstream_notes
+from release_notes import appstream_notes, fetch_notes_response, notes_diagnostic
 
 
 def _installation_option(installation: str) -> str:
@@ -30,8 +27,7 @@ def _list_rows(args: list[str], columns: int) -> list[list[str]] | None:
         )
     except FileNotFoundError:
         return []
-    except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
-        print("⚠ No se pudo completar la consulta de Flatpak.", file=sys.stderr)
+    except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired):
         return None
 
     rows = [line.split("\t") for line in result.stdout.splitlines()]
@@ -131,11 +127,9 @@ def fetch_release_notes(update: PackageUpdate, settings: dict[str, str]) -> dict
     platform = settings.get("platform")
     if settings.get("format") != "release-tables" or not url or not platform:
         return None
-    try:
-        response = requests.get(url, timeout=8)
-        response.raise_for_status()
-    except requests.RequestException:
-        return None
+    response = fetch_notes_response(url, "La página oficial", timeout=8)
+    if response is None:
+        return notes_diagnostic("source_missing", "La página oficial configurada no está accesible.")
     return parse_release_tables(response.text, update.new_pkgver, url, platform)
 
 

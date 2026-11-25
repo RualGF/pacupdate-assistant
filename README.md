@@ -19,18 +19,40 @@ solo para subir el límite de la API pública a 5000/hora):
 
     python3 main.py
 
+Si alguna fuente falla, el informe indica cuál y muestra las actualizaciones
+confirmadas de las demás. En ese caso el comando termina con código `1`.
+
+Al buscar notas, el informe distingue una fuente sin identificar, una versión
+localizada sin notas y una consulta incompleta. Las consultas de repositorios
+que fallan se pueden volver a intentar en la siguiente ejecución.
+
+Las notas verificadas se guardan durante 24 horas en `cache/release_notes.sqlite3`.
+Si la fuente, sus ajustes o las versiones del salto cambian, se consulta de nuevo.
+Cada ejecución comprueba las actualizaciones pendientes.
+
 ## Configuración
 
-- `data/packages.yaml` — paquetes que te importan, por categoría
-  (`applications`, `drivers`, `desktop`, `libraries`), con `source` opcional
-  para indicar de dónde sacar el changelog:
+- `data/packages.yaml` agrupa los paquetes por uso. `development` reúne lenguajes
+  como Python y PHP, editores y herramientas de desarrollo. `terminals` incluye
+  emuladores y shells, y `desktop` agrupa Plasma, KWin y Wayland. También puedes
+  usar `applications`, `gaming`, `tools`, `drivers`, `libraries` y `system`.
+  El campo opcional `source` indica de dónde sacar el changelog.
+  Los paquetes de `system`, incluidos los que están por clasificar, muestran
+  su descripción de pacman. Para ver sus notas, asígnalos a otra categoría.
   - `github:owner/repo`
   - `gitlab:owner/repo`
   - Si la publicación de GitHub o GitLab carece de notas, se buscan archivos
     AppStream, `CHANGELOG` y `NEWS` en la etiqueta de la versión. Para indicar
     un archivo concreto del repositorio, usa `release_notes.file`.
+  - En saltos de versiones numéricas se muestran las notas intermedias que se
+    puedan identificar en las publicaciones consultadas o en bloques del archivo.
+    Un archivo sin una entrada identificable se muestra como changelog general.
+    Los enlaces fijos se muestran como fuentes generales.
   - `mozilla` (solo firefox/thunderbird, plantilla de URL propia)
   - `link:https://...` (enlace fijo, para proyectos sin API de releases)
+  - `shared:nombre-del-paquete` para paquetes que siguen la versión y las notas
+    de otro, como los idiomas de Firefox. Si ambos actualizan a la misma versión,
+    el paquete vinculado aparece debajo del principal y se muestran las notas una vez.
   - Las aplicaciones Flatpak instaladas se detectan automáticamente y las notas
     se buscan por versión exacta en el catálogo AppStream local de su remoto.
     Usa `flatpak:ID.de.LaAplicacion` para asignar un nombre y una categoría en este

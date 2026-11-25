@@ -1,9 +1,10 @@
 import subprocess
 import os
 
-from models import PackageUpdate
+from models import PackageUpdate, UpdateCheckError
 from typing import Optional
 from dataclasses import dataclass, field
+from pathlib import Path
 
 @dataclass
 class PackageInfo:
@@ -41,21 +42,27 @@ def get_package_info() -> dict[str, PackageInfo]:
 
     return info
 
-def _run_pacman(args: list[str]) -> subprocess.CompletedProcess:
+def _run_pacman(args: list[str], *, timeout: int | None = None) -> subprocess.CompletedProcess:
     env = os.environ.copy()
     env["LC_ALL"] = "C"
-    return subprocess.run(args, capture_output=True, text=True, check=False, env=env)
+    return subprocess.run(args, capture_output=True, text=True, check=False, env=env, timeout=timeout)
 
 
 def run_checkupdates() -> list[str]:
     try:
-        result = subprocess.run(
-            ["checkupdates"], capture_output=True, text=True, check=False
-        )
-    except FileNotFoundError:
-        raise RuntimeError(
-            "checkupdates no encontrado. Instala 'pacman-contrib'."
-        )
+        result = _run_pacman(["checkupdates", "--nocolor"], timeout=60)
+    except FileNotFoundError as error:
+        raise UpdateCheckError("No se encontró checkupdates. Instala pacman-contrib.") from error
+    except subprocess.TimeoutExpired as error:
+        raise UpdateCheckError("checkupdates tardó más de 60 segundos.") from error
+    except OSError as error:
+        raise UpdateCheckError(f"No se pudo ejecutar checkupdates. {error}") from error
+
+    if result.returncode == 2:
+        return []
+    if result.returncode != 0:
+        detail = result.stderr.strip() or f"checkupdates terminó con código {result.returncode}."
+        raise UpdateCheckError(detail)
     return [l for l in result.stdout.splitlines() if l.strip()]
 
 
@@ -88,6 +95,38 @@ def get_foreign_packages() -> set[str]:
     result = _run_pacman(["pacman", "-Qmq"])
     return set(result.stdout.split())
 
+
+def get_foreign_package_versions() -> dict[str, str]:
+    try:
+        result = _run_pacman(["pacman", "-Qm"], timeout=10)
+    except (OSError, subprocess.TimeoutExpired) as error:
+        raise UpdateCheckError(f"No se pudieron consultar los paquetes foráneos. {error}") from error
+
+    if result.returncode == 1 and not (result.stdout.strip() or result.stderr.strip()):
+        return {}
+    if result.returncode != 0 or result.stderr.strip():
+        detail = result.stderr.strip() or f"pacman -Qm terminó con código {result.returncode}."
+        raise UpdateCheckError(detail)
+
+    installed = {}
+    for line in result.stdout.splitlines():
+        fields = line.split()
+        if len(fields) != 2:
+            raise UpdateCheckError("pacman -Qm devolvió un listado inesperado.")
+        name, version = fields
+        installed[name] = version
+    return installed
+
+
+def compare_versions(first: str, second: str) -> int:
+    try:
+        result = _run_pacman(["vercmp", first, second], timeout=5)
+        if result.returncode != 0:
+            raise UpdateCheckError("vercmp no pudo comparar las versiones de AUR.")
+        return int(result.stdout.strip())
+    except (OSError, subprocess.TimeoutExpired, ValueError) as error:
+        raise UpdateCheckError(f"No se pudo comparar la versión de AUR con vercmp. {error}") from error
+
 def get_installed_version(pkgname: str) -> Optional[str]:
     result = _run_pacman(["pacman", "-Q", pkgname])
     if result.returncode != 0:
@@ -105,3 +144,32 @@ def get_package_groups() -> dict[str, str]:
             group, name = parts
             groups.setdefault(name, group)
     return groups
+
+
+def get_package_bases(updates: list[PackageUpdate]) -> dict[str, str]:
+    native = [update for update in updates if not update.flatpak_ref]
+    if not native:
+        return {}
+    try:
+        result = _run_pacman(["pacman-conf", "DBPath"])
+    except FileNotFoundError:
+        return {}
+    if result.returncode != 0 or not result.stdout.strip():
+        return {}
+
+    database = Path(result.stdout.strip()) / "local"
+    bases = {}
+    for update in native:
+        versions = dict.fromkeys((update.old_version, update.old_version.split(":", 1)[-1]))
+        for version in versions:
+            desc = database / f"{update.name}-{version}" / "desc"
+            try:
+                fields = desc.read_text(encoding="utf-8").splitlines()
+            except (OSError, UnicodeError):
+                continue
+            if "%BASE%" in fields:
+                index = fields.index("%BASE%") + 1
+                if index < len(fields) and fields[index] and not fields[index].startswith("%"):
+                    bases[update.name] = fields[index]
+            break
+    return bases
