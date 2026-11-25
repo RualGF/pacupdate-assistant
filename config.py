@@ -12,6 +12,8 @@ def load_packages_map() -> dict[str, str]:
     raw = yaml.safe_load((DATA_DIR / "packages.yaml").read_text())
     mapping = {}
     for category, entries in raw.items():
+        if category == "python":
+            category = "development"
         for name in (entries or {}):
             mapping[name] = category
     return mapping

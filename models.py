@@ -3,6 +3,10 @@ from dataclasses import dataclass
 from enum import Enum
 
 
+class UpdateCheckError(RuntimeError):
+    """La consulta de una fuente de actualizaciones quedó incompleta."""
+
+
 class ChangeType(Enum):
     VERSION = "version"    # pkgver cambió → actualización real
     REBUILD = "rebuild"    # solo pkgrel cambió
@@ -48,13 +52,16 @@ class PackageUpdate:
     old_pkgrel: str
     new_pkgver: str
     new_pkgrel: str
-    category: str = "system"   # "applications" | "drivers" | "desktop" | "system"
+    category: str = "system"
     known: bool = False        # ¿está en packages.yaml?
     is_new: bool = False       # ¿nunca visto antes en cache?
     show_rebuilds: bool = False
     flatpak_ref: str = ""
     flatpak_installation: str = ""
     flatpak_origin: str = ""
+    flatpak_kind: str = "app"
+    flatpak_name: str = ""
+    flatpak_extension: bool = False
 
 
     @property
