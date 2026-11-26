@@ -30,6 +30,9 @@ Las notas verificadas se guardan durante 24 horas en `cache/release_notes.sqlite
 Si la fuente, sus ajustes o las versiones del salto cambian, se consulta de nuevo.
 Cada ejecución comprueba las actualizaciones pendientes.
 
+El informe muestra el texto de notas de hasta 550 caracteres. Para notas más
+largas muestra el enlace a la fuente. Si faltara el enlace, muestra un extracto.
+
 ## Configuración
 
 - `data/packages.yaml` agrupa los paquetes por uso. `development` reúne lenguajes

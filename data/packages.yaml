@@ -94,7 +94,7 @@ development:
   vim: {}
   git: {}
   docker:
-    source: "github:docker/cli"
+    source: "template:https://docs.docker.com/engine/release-notes/{version_major}/#{version_compact}"
 
   docker-compose: {}
   mariadb:

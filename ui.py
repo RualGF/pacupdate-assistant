@@ -40,14 +40,16 @@ BUMP_ICONS = {
 }
 
 REFERENCE_RE = re.compile(r'^\[(\w+)\]:\s*(\S+)', re.MULTILINE)
+NOTES_PREVIEW_LIMIT = 550
 
-def safe_markdown_preview(body: str, limit: int = 700) -> str:
+def safe_markdown_preview(body: str, limit: int = NOTES_PREVIEW_LIMIT) -> str:
+    if len(body) <= limit:
+        return body
     references = REFERENCE_RE.findall(body)
-    if len(body) > limit:
-        cut = body.rfind("\n", 0, limit)
-        preview = body[: cut if cut > 0 else limit] + "\n..."
-    else:
-        preview = body
+    marker = "\n…"
+    end = limit - len(marker)
+    cut = body.rfind("\n", 0, end + 1)
+    preview = body[: cut if cut > 0 else end] + marker
     if references:
         preview += "\n\n" + "\n".join(f"[{key}]: {url}" for key, url in references)
     return preview
@@ -58,10 +60,13 @@ def display_name(pkg_name: str, aliases: dict[str, str]) -> str:
 
 def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases=None, absorbed=None, *,
            pkg_info=None, discovery_errors: dict[str, str] | None = None,
-           notes_cache: ReleaseNotesCache | None = None) -> None:
+           notes_cache: ReleaseNotesCache | None = None,
+           group_rebuilds: list[tuple[str, list[PackageUpdate]]] | None = None) -> None:
     cache = load_github_repo_cache()
     token = load_github_token()
     absorbed = absorbed or set()
+    group_rebuilds = group_rebuilds or []
+    grouped_rebuilds = {member.name for _, members in group_rebuilds for member in members}
     aliases = load_aliases()
     if pkg_info is None:
         pkg_info = get_package_info()
@@ -108,17 +113,20 @@ def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases
     def _print_version_notes(notes: dict, version: str, urls: set[str]) -> None:
         url = notes["url"]
         label = f"Notas de la versión {version}"
-        if notes["type"] == "text":
+        body = notes.get("body", "")
+        if notes["type"] == "text" and (len(body) <= NOTES_PREVIEW_LIMIT or not url):
             console.print(f"   📝 [bold]{label}[/bold]")
-            console.print(Markdown(safe_markdown_preview(notes["body"])))
+            console.print(Markdown(safe_markdown_preview(body)))
             if url and url not in urls:
-                console.print(f"   [dim]{url}[/dim]")
-        elif url and url not in urls:
-            console.print(f"   [dim]📝 {label}: {url}[/dim]")
+                console.print(f"   {url}", style="dim", markup=False)
+        elif url:
+            display = f"{label}: {url}" if url not in urls else f"{label} (enlace compartido)"
+            console.print(f"   📝 {display}", style="dim", markup=False)
         urls.add(url)
     
             
-    visible = [u for u in updates if u.visible and (u.flatpak_ref or u.name not in absorbed)]
+    grouped_names = grouped_rebuilds.union(absorbed)
+    visible = [u for u in updates if u.visible and (u.flatpak_ref or u.name not in grouped_names)]
     parents = {(u.name, u.new_pkgver) for u in visible if not u.flatpak_ref
                and u.change_type is ChangeType.VERSION and not shared_notes_parent(sources.get(u.name, ""))}
     related = defaultdict(list)
@@ -225,17 +233,20 @@ def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases
             "[dim]Añádelos a packages.yaml para clasificarlos.[/dim]"
         )
 
-    # Paquetes de sistema colapsados: solo rebuild y no conocidos ni nuevos
     hidden = [
         u for u in updates
-        if u.change_type is ChangeType.REBUILD and not u.visible
+        if u.change_type is ChangeType.REBUILD and not u.visible and u.name not in grouped_rebuilds
     ]
-    if hidden:
+    if group_rebuilds or hidden:
         console.print(f"[bold]{'─' * 50}[/bold]")
         console.print("[dim]⚙️  Rebuilds (solo cambia el empaquetado):[/dim]")
-        console.print(
-            "[dim]" + ", ".join(display_name(u.name, aliases) for u in hidden) + "[/dim]"
-        )
+        for group, members in group_rebuilds:
+            sample = members[0]
+            title = GROUP_TITLES.get(group, group)
+            console.print(f"   {title} {sample.new_pkgver} · {len(members)} paquetes (pkgrel {sample.old_pkgrel}→{sample.new_pkgrel})",
+                          style="dim", markup=False)
+        if hidden:
+            console.print("[dim]" + ", ".join(display_name(u.name, aliases) for u in hidden) + "[/dim]")
 
 def render_pending_review(cache: dict[str, dict]) -> None:
     dudosos = {name: info for name, info in cache.items() if info["confidence"] != "high" and info["repo"]}

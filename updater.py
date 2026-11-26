@@ -130,6 +130,21 @@ def detect_group_releases(
 
     return releases, absorbed
 
+
+def detect_group_rebuilds(
+    updates: list[PackageUpdate], groups: dict[str, str], bases: dict[str, str],
+) -> list[tuple[str, list[PackageUpdate]]]:
+    by_group: dict[tuple[str, str, str, str], list[PackageUpdate]] = defaultdict(list)
+    for update in updates:
+        if update.flatpak_ref or update.known or update.change_type is not ChangeType.REBUILD:
+            continue
+        group = groups.get(update.name) or groups.get(bases.get(update.name, ""))
+        if group:
+            key = (group, update.new_pkgver, update.old_pkgrel, update.new_pkgrel)
+            by_group[key].append(update)
+    return [(key[0], members) for key, members in by_group.items() if len(members) >= MIN_GROUP_SIZE]
+
+
 def get_aur_updates() -> list[PackageUpdate]:
     installed = get_foreign_package_versions()
     raw_updates = check_aur_updates(set(installed), installed)
@@ -185,8 +200,10 @@ def _resolve_one_changelog(u: PackageUpdate, sources: dict, cache: dict, token: 
         return {"type": "link", "url": MOZILLA_URLS[u.name].format(version=u.new_pkgver)}
     elif raw_source.startswith("template:"):
         ver = u.new_pkgver.split(":")[-1]
+        parts = ver.split(".")
         url = raw_source.split(":", 1)[1].format(
-            version=ver, version_dash=ver.replace(".", "-"), version_series=".".join(ver.split(".")[:2]),
+            version=ver, version_dash="-".join(parts), version_series=".".join(parts[:2]),
+            version_major=parts[0], version_compact="".join(parts),
         )
         return {"type": "link", "url": url}
     if not raw_source.startswith(REPOSITORY_SOURCE_PREFIXES):
