@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from updater import (get_updates, get_aur_updates, classify_updates, resolve_github_repos, detect_group_releases,
-                     detect_group_rebuilds)
+                     detect_group_rebuilds, summarize_pending_changes)
 from ui import render
 from pacman import get_package_info, get_package_groups, get_package_bases
 from config import load_packages_sources
@@ -27,11 +27,14 @@ def main() -> int:
     for issue in issues:
         print(issue)
 
+    pending_summary = "" if issues else summarize_pending_changes(updates)
     if not updates:
         if issues:
             print("No se pudo confirmar si hay actualizaciones pendientes.")
             return 1
         print("✅ Sistema actualizado, no hay paquetes pendientes.")
+        if pending_summary:
+            print(pending_summary)
         return 0
 
     if issues:
@@ -42,6 +45,7 @@ def main() -> int:
     save_seen_packages(seen | {u.name for u in updates})
 
     pkg_info = {}
+    bases = {}
     discovery_errors = {}
     group_releases, absorbed = [], set()
     group_rebuilds = []
@@ -60,7 +64,8 @@ def main() -> int:
         discovery_errors = resolve_github_repos(candidates, pkg_info, sources)
 
     render(updates, sources, group_releases, absorbed, pkg_info=pkg_info, discovery_errors=discovery_errors,
-           notes_cache=ReleaseNotesCache(), group_rebuilds=group_rebuilds)
+           notes_cache=ReleaseNotesCache(), group_rebuilds=group_rebuilds, package_bases=bases,
+           pending_summary=pending_summary)
     return 1 if issues else 0
 
 

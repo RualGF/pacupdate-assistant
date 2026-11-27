@@ -89,6 +89,62 @@ def _fetch_json(url: str, headers: dict):
     return data
 
 
+def fetch_cachyos_kernel_notes(base: str, old_version: str, new_version: str, token: Optional[str]) -> dict:
+    metadata_url = f"https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/{base}/.SRCINFO"
+    missing = notes_diagnostic("version_missing", "Sin notas de CachyOS verificadas para este cambio.")
+    metadata = _fetch(metadata_url, {})
+    if metadata is None:
+        return missing
+
+    fields = dict(re.findall(r"^\s*(pkgbase|pkgver|pkgrel) = (\S+)$", metadata, re.MULTILINE))
+    if fields.get("pkgbase") != base or f"{fields.get('pkgver')}-{fields.get('pkgrel')}" != new_version:
+        return missing
+
+    repo = "CachyOS/linux"
+    tag_pattern = r"cachyos-(\d+\.\d+\.\d+)-(\d+)"
+    source = re.search(
+        rf"^\s*source = https://github\.com/{repo}/releases/download/({tag_pattern})/\1\.tar\.gz$",
+        metadata, re.MULTILINE,
+    )
+    if not source or source[2] != fields["pkgver"]:
+        return missing
+
+    tag, version, revision = source.groups()
+    old_pkgver, _, old_pkgrel = old_version.rpartition("-")
+    same_version = old_pkgver == version
+    if same_version and (not old_pkgrel.isdecimal() or int(revision) <= int(old_pkgrel)):
+        return missing
+
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
+    entries = []
+    while True:
+        release = _fetch_json(f"https://api.github.com/repos/{repo}/releases/tags/{tag}", headers)
+        if release is None:
+            break
+        if not isinstance(release, dict) or release.get("tag_name") != tag:
+            raise NotesLookupError("GitHub devolvió una publicación inesperada para el kernel de CachyOS.")
+        raw_body = release.get("body")
+        if raw_body is not None and not isinstance(raw_body, str):
+            raise NotesLookupError("GitHub devolvió notas inesperadas para el kernel de CachyOS.")
+        body = published_notes(raw_body)
+        if release.get("draft") or release.get("prerelease") or not body:
+            break
+        entries.append({"type": "text", "body": body, "version": tag.removeprefix("cachyos-"),
+                        "url": f"https://github.com/{repo}/releases/tag/{tag}"})
+        previous = re.search(rf"^Previous release: `{tag_pattern}`\s*$", body, re.MULTILINE)
+        if not same_version or not previous or previous[1] != version:
+            break
+        previous_revision = int(previous[2])
+        if not int(old_pkgrel) < previous_revision < int(revision):
+            break
+        revision = previous[2]
+        tag = f"cachyos-{version}-{revision}"
+
+    if len(entries) > 1:
+        return {"type": "range", "entries": entries, "fallback": None, "target_found": True}
+    return entries[0] if entries else missing
+
+
 def fetch_release_notes(repo: str, version: str, token: Optional[str], notes_file: str | None = None, *,
                         old_version: str | None = None) -> Optional[dict]:
     headers = {"Authorization": f"Bearer {token}"} if token else {}

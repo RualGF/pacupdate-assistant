@@ -8,6 +8,7 @@ from pathlib import Path
 
 CACHE_DIR = Path(__file__).parent / "cache"
 SEEN_FILE = CACHE_DIR / "seen_packages.json"
+PENDING_UPDATES_FILE = CACHE_DIR / "pending_updates.sqlite3"
 NOTES_CACHE_FILE = CACHE_DIR / "release_notes.sqlite3"
 NOTES_CACHE_TTL = 24 * 60 * 60
 
@@ -21,6 +22,34 @@ def load_seen_packages() -> set[str]:
 def save_seen_packages(names: set[str]) -> None:
     CACHE_DIR.mkdir(exist_ok=True)
     SEEN_FILE.write_text(json.dumps(sorted(names), ensure_ascii=False, indent=2))
+
+
+def remember_pending_updates(current: dict[str, str]) -> tuple[dict[str, str] | None, bool]:
+    try:
+        PENDING_UPDATES_FILE.parent.mkdir(parents=True, exist_ok=True)
+        with closing(sqlite3.connect(PENDING_UPDATES_FILE, timeout=0.2)) as database, database:
+            database.execute("BEGIN IMMEDIATE")
+            database.execute("""
+                CREATE TABLE IF NOT EXISTS pending_updates (
+                    id INTEGER PRIMARY KEY CHECK (id = 1), versions TEXT NOT NULL
+                )
+            """)
+            row = database.execute("SELECT versions FROM pending_updates WHERE id = 1").fetchone()
+            database.execute("""
+                INSERT INTO pending_updates VALUES (1, ?)
+                ON CONFLICT(id) DO UPDATE SET versions = excluded.versions
+            """, (json.dumps(current, ensure_ascii=False),))
+    except (OSError, sqlite3.Error):
+        return None, False
+
+    try:
+        previous = json.loads(row[0]) if row else None
+    except ValueError:
+        return None, True
+    if isinstance(previous, dict) and all(isinstance(version, str) for version in previous.values()):
+        return previous, True
+    return None, True
+
 
 def load_github_repo_cache() -> dict[str, dict]:
     path = CACHE_DIR / "github_repos.json"

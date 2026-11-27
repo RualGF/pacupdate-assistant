@@ -22,6 +22,10 @@ solo para subir el límite de la API pública a 5000/hora):
 Si alguna fuente falla, el informe indica cuál y muestra las actualizaciones
 confirmadas de las demás. En ese caso el comando termina con código `1`.
 
+Cuando hay cambios desde la última consulta completa, el informe indica qué
+paquetes entraron o salieron de la lista de pendientes y cuáles ofrecen ahora
+otra versión. La primera consulta completa establece la referencia.
+
 Al buscar notas, el informe distingue una fuente sin identificar, una versión
 localizada sin notas y una consulta incompleta. Las consultas de repositorios
 que fallan se pueden volver a intentar en la siguiente ejecución.
@@ -53,6 +57,9 @@ largas muestra el enlace a la fuente. Si faltara el enlace, muestra un extracto.
     Los enlaces fijos se muestran como fuentes generales.
   - `mozilla` (solo firefox/thunderbird, plantilla de URL propia)
   - `link:https://...` (enlace fijo, para proyectos sin API de releases)
+  - `cachyos-kernel:nombre-del-pkgbase` verifica en `.SRCINFO` la etiqueta del
+    código fuente del kernel y consulta sus notas publicadas, incluso si solo
+    cambia el `pkgrel`.
   - `shared:nombre-del-paquete` para paquetes que siguen la versión y las notas
     de otro, como los idiomas de Firefox. Si ambos actualizan a la misma versión,
     el paquete vinculado aparece debajo del principal y se muestran las notas una vez.
