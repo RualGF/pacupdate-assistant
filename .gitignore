@@ -220,3 +220,4 @@ __marimo__/
 
 # Caché local de notas de versión
 /cache/release_notes.sqlite3*
+/cache/pending_updates.sqlite3*

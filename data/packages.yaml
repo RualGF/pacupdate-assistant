@@ -52,6 +52,10 @@ applications:
   dolphin: {}
 
 desktop:
+  pipewire:
+    source: "gitlab-self:gitlab.freedesktop.org:pipewire/pipewire"
+  lib32-pipewire:
+    source: "shared:pipewire"
   plasma-desktop: {}
   kwin: {}
   wayland: {}
@@ -94,7 +98,7 @@ development:
   vim: {}
   git: {}
   docker:
-    source: "github:docker/cli"
+    source: "template:https://docs.docker.com/engine/release-notes/{version_major}/#{version_compact}"
 
   docker-compose: {}
   mariadb:
@@ -134,6 +138,11 @@ development:
   python-yaml: {}
   python-lxml: {}
   python-packaging: {}
+  python-httpx:
+    source: "github:encode/httpx"
+    release_notes:
+      file: CHANGELOG.md
+  python-reportlab: {}
   opencv: {}
   python-jupyter-client: {}
   python-jupyterlab-server: {}
@@ -233,17 +242,17 @@ drivers:
   linux: {source: kernel.org}
   mesa: {source: mesa}
   linux-cachyos:
-    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos"
+    source: "cachyos-kernel:linux-cachyos"
   linux-cachyos-headers:
-    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos"
+    source: "cachyos-kernel:linux-cachyos"
   linux-cachyos-nvidia-open:
-    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos"
+    source: "cachyos-kernel:linux-cachyos"
   linux-cachyos-lts:
-    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos-lts"
+    source: "cachyos-kernel:linux-cachyos-lts"
   linux-cachyos-lts-headers:
-    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos-lts"
+    source: "cachyos-kernel:linux-cachyos-lts"
   linux-cachyos-lts-nvidia-open:
-    source: "link:https://github.com/CachyOS/linux-cachyos/commits/master/linux-cachyos-lts"
+    source: "cachyos-kernel:linux-cachyos-lts"
   hplip: {}
 
   nvidia-settings: {source: github:NVIDIA/open-gpu-kernel-modules}

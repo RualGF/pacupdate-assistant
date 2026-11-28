@@ -22,6 +22,11 @@ solo para subir el límite de la API pública a 5000/hora):
 Si alguna fuente falla, el informe indica cuál y muestra las actualizaciones
 confirmadas de las demás. En ese caso el comando termina con código `1`.
 
+El informe resume los nuevos pendientes y los paquetes que ofrecen otra versión
+desde la última consulta completa. Si hay hasta tres cambios de este tipo,
+incluye los nombres y las versiones. La referencia se actualiza con la lista
+completa de pendientes en cada consulta completa.
+
 Al buscar notas, el informe distingue una fuente sin identificar, una versión
 localizada sin notas y una consulta incompleta. Las consultas de repositorios
 que fallan se pueden volver a intentar en la siguiente ejecución.
@@ -29,6 +34,9 @@ que fallan se pueden volver a intentar en la siguiente ejecución.
 Las notas verificadas se guardan durante 24 horas en `cache/release_notes.sqlite3`.
 Si la fuente, sus ajustes o las versiones del salto cambian, se consulta de nuevo.
 Cada ejecución comprueba las actualizaciones pendientes.
+
+El informe muestra el texto de notas de hasta 550 caracteres. Para notas más
+largas muestra el enlace a la fuente. Si faltara el enlace, muestra un extracto.
 
 ## Configuración
 
@@ -39,6 +47,8 @@ Cada ejecución comprueba las actualizaciones pendientes.
   El campo opcional `source` indica de dónde sacar el changelog.
   Los paquetes de `system`, incluidos los que están por clasificar, muestran
   su descripción de pacman. Para ver sus notas, asígnalos a otra categoría.
+  Los paquetes `python-*` de `development` muestran la descripción de pacman
+  antes de las notas de versión.
   - `github:owner/repo`
   - `gitlab:owner/repo`
   - Si la publicación de GitHub o GitLab carece de notas, se buscan archivos
@@ -50,6 +60,9 @@ Cada ejecución comprueba las actualizaciones pendientes.
     Los enlaces fijos se muestran como fuentes generales.
   - `mozilla` (solo firefox/thunderbird, plantilla de URL propia)
   - `link:https://...` (enlace fijo, para proyectos sin API de releases)
+  - `cachyos-kernel:nombre-del-pkgbase` verifica en `.SRCINFO` la etiqueta del
+    código fuente del kernel y consulta sus notas publicadas, incluso si solo
+    cambia el `pkgrel`.
   - `shared:nombre-del-paquete` para paquetes que siguen la versión y las notas
     de otro, como los idiomas de Firefox. Si ambos actualizan a la misma versión,
     el paquete vinculado aparece debajo del principal y se muestran las notas una vez.

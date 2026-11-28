@@ -1,8 +1,9 @@
 from pacman import run_checkupdates, parse_checkupdates, get_foreign_packages, get_foreign_package_versions, PackageInfo, _split_version
 from aur import check_aur_updates
 from config import load_release_notes_settings, load_packages_map, load_github_token
-from cache import ReleaseNotesCache, load_seen_packages, save_seen_packages, load_github_repo_cache, save_github_repo_cache
-from github import discover_github_repo, verify_repo, fetch_release_notes, is_trustworthy
+from cache import (ReleaseNotesCache, load_seen_packages, save_seen_packages, load_github_repo_cache,
+                   save_github_repo_cache, remember_pending_updates)
+from github import discover_github_repo, verify_repo, fetch_release_notes, fetch_cachyos_kernel_notes, is_trustworthy
 from models import PackageUpdate, ChangeType, VersionBump
 from release_notes import NotesLookupError, notes_diagnostic
 from collections import defaultdict
@@ -20,12 +21,61 @@ MOZILLA_URLS = {
 }
 PLASMA_CHANGELOG = "https://kde.org/announcements/changelogs/plasma/{major}/{old}-{new}/"
 MIN_GROUP_SIZE = 5  # umbral para considerar que es un release real, no casualidad
-EXPLICIT_SOURCE_PREFIXES = ("github:", "gitlab:", "gitlab-self:", "link:", "template:", "flatpak:", "shared:")
+PENDING_DETAILS_LIMIT = 3
+EXPLICIT_SOURCE_PREFIXES = (
+    "github:", "gitlab:", "gitlab-self:", "link:", "template:", "flatpak:", "shared:", "cachyos-kernel:",
+)
 REPOSITORY_SOURCE_PREFIXES = ("github:", "gitlab:", "gitlab-self:")
 
 def get_updates() -> list[PackageUpdate]:
 
     return parse_checkupdates(run_checkupdates())
+
+
+def summarize_pending_changes(updates: list[PackageUpdate]) -> str:
+    def pending_name(update: PackageUpdate) -> str:
+        if update.flatpak_ref:
+            return (f"{update.flatpak_kind}/{update.flatpak_ref} "
+                    f"(Flatpak · {update.flatpak_installation}/{update.flatpak_origin})")
+        return update.name
+
+    by_name = {pending_name(update): update for update in updates}
+    current = {name: update.new_pkgver if update.flatpak_ref else update.new_version for name, update in by_name.items()}
+    previous, saved = remember_pending_updates(current)
+    if not saved:
+        return "No se pudo guardar la consulta para comparar los pendientes."
+    if previous is None:
+        return "Consulta guardada como referencia para la próxima comparación."
+
+    def describe(name: str, old: str, new: str) -> str:
+        if old and new and old != new:
+            return f"{name} ({old} → {new})"
+        return f"{name} ({new})" if new else name
+
+    added = sorted(current.keys() - previous.keys())
+    changed = sorted(name for name in current.keys() & previous.keys() if current[name] != previous[name])
+    show_details = len(added) + len(changed) <= PENDING_DETAILS_LIMIT
+    parts = []
+    if added:
+        label = "pendiente" if len(added) == 1 else "pendientes"
+        summary = f"+{len(added)} {label}"
+        if show_details:
+            details = []
+            for name in added:
+                update = by_name[name]
+                old, new = update.old_pkgver, update.new_pkgver
+                if not update.flatpak_ref and (update.old_pkgrel != update.new_pkgrel or old == new):
+                    old, new = update.old_version, update.new_version
+                details.append(describe(name, old, new))
+            summary += " · " + ", ".join(details)
+        parts.append(summary)
+    if changed:
+        summary = f"{len(changed)} con otra versión disponible"
+        if show_details:
+            summary += " · " + ", ".join(describe(name, previous[name], current[name]) for name in changed)
+        parts.append(summary)
+    return "Desde la última consulta: " + " | ".join(parts) if parts else ""
+
 
 def resolve_github_repos(updates: list[PackageUpdate], pkg_info: dict[str, PackageInfo], sources: dict[str, str]) -> dict[str, str]:
     candidates = []
@@ -96,9 +146,13 @@ def detect_group_releases(
         base = bases.get(u.name)
         if base:
             key = (base, u.old_pkgver, u.new_pkgver)
-            by_base[key].append(u)
             if group := groups.get(u.name):
                 inherited_groups[key].add(group)
+            base_source = sources.get(base, "")
+            if sources.get(u.name, "") in {"", base_source}:
+                notes_base = shared_notes_parent(base_source)
+                package_releases = (u.old_pkgrel, u.new_pkgrel) if base_source.startswith("cachyos-kernel:") else ()
+                by_base[notes_base or base, u.old_pkgver, u.new_pkgver, package_releases].append(u)
 
     by_group = defaultdict(list)
     for u in version_updates:
@@ -118,17 +172,33 @@ def detect_group_releases(
                              "bump": members[0].version_bump})
             absorbed.update(member.name for member in members)
 
-    for (base, old, new), members in by_base.items():
-        members = [member for member in members if member.name not in absorbed
-                   and sources.get(member.name) in {None, sources.get(base)}]
+    for (base, old, new, _), members in by_base.items():
+        members = [member for member in members if member.name not in absorbed]
         if len(members) >= 2:
-            representative = next((member for member in members if member.name == base), members[0])
+            representative = next((member for member in members if member.name == base), None)
+            if representative is None:
+                representative = next((member for member in members if member.name in sources), members[0])
             releases.append({"group": base, "old": old, "new": new, "count": len(members),
                              "bump": representative.version_bump, "representative": representative,
                              "members": [member.name for member in members]})
             absorbed.update(member.name for member in members)
 
     return releases, absorbed
+
+
+def detect_group_rebuilds(
+    updates: list[PackageUpdate], groups: dict[str, str], bases: dict[str, str],
+) -> list[tuple[str, list[PackageUpdate]]]:
+    by_group: dict[tuple[str, str, str, str], list[PackageUpdate]] = defaultdict(list)
+    for update in updates:
+        if update.flatpak_ref or update.known or update.change_type is not ChangeType.REBUILD:
+            continue
+        group = groups.get(update.name) or groups.get(bases.get(update.name, ""))
+        if group:
+            key = (group, update.new_pkgver, update.old_pkgrel, update.new_pkgrel)
+            by_group[key].append(update)
+    return [(key[0], members) for key, members in by_group.items() if len(members) >= MIN_GROUP_SIZE]
+
 
 def get_aur_updates() -> list[PackageUpdate]:
     installed = get_foreign_package_versions()
@@ -171,6 +241,12 @@ def _resolve_one_changelog(u: PackageUpdate, sources: dict, cache: dict, token: 
 
     if raw_source.startswith("flatpak:"):
         return None
+    if raw_source.startswith("cachyos-kernel:"):
+        base = raw_source.removeprefix("cachyos-kernel:")
+        old_version = u.old_version.split(":")[-1]
+        new_version = u.new_version.split(":")[-1]
+        key = ("cachyos-kernel", base, old_version, new_version)
+        return _cached_notes(notes_cache, key, partial(fetch_cachyos_kernel_notes, base, old_version, new_version, token))
     if u.change_type is not ChangeType.VERSION and not raw_source.startswith("link:"):
         return None
 
@@ -185,8 +261,10 @@ def _resolve_one_changelog(u: PackageUpdate, sources: dict, cache: dict, token: 
         return {"type": "link", "url": MOZILLA_URLS[u.name].format(version=u.new_pkgver)}
     elif raw_source.startswith("template:"):
         ver = u.new_pkgver.split(":")[-1]
+        parts = ver.split(".")
         url = raw_source.split(":", 1)[1].format(
-            version=ver, version_dash=ver.replace(".", "-"), version_series=".".join(ver.split(".")[:2]),
+            version=ver, version_dash="-".join(parts), version_series=".".join(parts[:2]),
+            version_major=parts[0], version_compact="".join(parts),
         )
         return {"type": "link", "url": url}
     if not raw_source.startswith(REPOSITORY_SOURCE_PREFIXES):

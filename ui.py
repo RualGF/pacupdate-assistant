@@ -27,7 +27,7 @@ CATEGORY_TITLES = {
 }
 CATEGORY_ORDER = tuple(CATEGORY_TITLES)
 GROUP_TITLES = {"kf6": "KDE Frameworks", "kde-applications": "KDE Gear", "qt6": "Qt 6",
-                "gcc": "GCC", "gtk4": "GTK 4", "mariadb": "MariaDB"}
+                "gcc": "GCC", "gtk4": "GTK 4", "mariadb": "MariaDB", "pipewire": "PipeWire (audio y vídeo)"}
 GROUP_URLS = {
     "kf6": "https://kde.org/announcements/frameworks/{major}/{version}/",
     "kde-applications": "https://kde.org/es/announcements/gear/{version}/",
@@ -40,14 +40,16 @@ BUMP_ICONS = {
 }
 
 REFERENCE_RE = re.compile(r'^\[(\w+)\]:\s*(\S+)', re.MULTILINE)
+NOTES_PREVIEW_LIMIT = 550
 
-def safe_markdown_preview(body: str, limit: int = 700) -> str:
+def safe_markdown_preview(body: str, limit: int = NOTES_PREVIEW_LIMIT) -> str:
+    if len(body) <= limit:
+        return body
     references = REFERENCE_RE.findall(body)
-    if len(body) > limit:
-        cut = body.rfind("\n", 0, limit)
-        preview = body[: cut if cut > 0 else limit] + "\n..."
-    else:
-        preview = body
+    marker = "\n…"
+    end = limit - len(marker)
+    cut = body.rfind("\n", 0, end + 1)
+    preview = body[: cut if cut > 0 else end] + marker
     if references:
         preview += "\n\n" + "\n".join(f"[{key}]: {url}" for key, url in references)
     return preview
@@ -58,20 +60,29 @@ def display_name(pkg_name: str, aliases: dict[str, str]) -> str:
 
 def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases=None, absorbed=None, *,
            pkg_info=None, discovery_errors: dict[str, str] | None = None,
-           notes_cache: ReleaseNotesCache | None = None) -> None:
+           notes_cache: ReleaseNotesCache | None = None,
+           group_rebuilds: list[tuple[str, list[PackageUpdate]]] | None = None,
+           package_bases: dict[str, str] | None = None, pending_summary: str = "") -> None:
     cache = load_github_repo_cache()
     token = load_github_token()
     absorbed = absorbed or set()
+    group_rebuilds = group_rebuilds or []
+    package_bases = package_bases or {}
+    grouped_rebuilds = {member.name for _, members in group_rebuilds for member in members}
     aliases = load_aliases()
     if pkg_info is None:
         pkg_info = get_package_info()
     console.print(f"[bold]Actualizaciones pendientes: {len(updates)}[/bold]")
+    if pending_summary:
+        console.print(pending_summary, markup=False)
 
     def _print_update_detail(u: PackageUpdate) -> None:
-        if u.category == "system":
+        python_in_development = u.category == "development" and not u.flatpak_ref and u.name.startswith("python-")
+        if u.category == "system" or python_in_development:
             info = pkg_info.get(u.name)
             if info and info.description:
                 console.print(f"   {info.description}", style="dim", markup=False)
+        if u.category == "system":
             return
 
         changelog = resolve_one_changelog(u, sources, cache, token, discovery_errors=discovery_errors, notes_cache=notes_cache)
@@ -89,7 +100,7 @@ def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases
             changelog = changelog["fallback"]
 
         if changelog and changelog["type"] in {"text", "link"}:
-            _print_version_notes(changelog, u.new_pkgver.split(":")[-1], set())
+            _print_version_notes(changelog, changelog.get("version", u.new_pkgver.split(":")[-1]), set())
         elif changelog and changelog["type"] == "general":
             console.print(f"   [dim]📝 Changelog general: {changelog['url']}[/dim]")
         elif changelog and changelog["type"] == "source":
@@ -108,32 +119,53 @@ def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases
     def _print_version_notes(notes: dict, version: str, urls: set[str]) -> None:
         url = notes["url"]
         label = f"Notas de la versión {version}"
-        if notes["type"] == "text":
+        body = notes.get("body", "")
+        if notes["type"] == "text" and (len(body) <= NOTES_PREVIEW_LIMIT or not url):
             console.print(f"   📝 [bold]{label}[/bold]")
-            console.print(Markdown(safe_markdown_preview(notes["body"])))
+            console.print(Markdown(safe_markdown_preview(body)))
             if url and url not in urls:
-                console.print(f"   [dim]{url}[/dim]")
-        elif url and url not in urls:
-            console.print(f"   [dim]📝 {label}: {url}[/dim]")
+                console.print(f"   {url}", style="dim", markup=False)
+        elif url:
+            display = f"{label}: {url}" if url not in urls else f"{label} (enlace compartido)"
+            console.print(f"   📝 {display}", style="dim", markup=False)
         urls.add(url)
     
             
-    visible = [u for u in updates if u.visible and (u.flatpak_ref or u.name not in absorbed)]
-    parents = {(u.name, u.new_pkgver) for u in visible if not u.flatpak_ref
-               and u.change_type is ChangeType.VERSION and not shared_notes_parent(sources.get(u.name, ""))}
+    grouped_names = grouped_rebuilds.union(absorbed)
+    visible = [u for u in updates if u.visible and (u.flatpak_ref or u.name not in grouped_names)]
+
+    def _related_key(u: PackageUpdate, name: str) -> tuple[str, ...]:
+        if u.change_type is ChangeType.REBUILD:
+            return name, u.old_version, u.new_version
+        return name, u.new_pkgver
+
+    parents = {_related_key(u, u.name) for u in visible if not u.flatpak_ref
+               and not shared_notes_parent(sources.get(u.name, ""))}
     related = defaultdict(list)
     individual = []
     for u in visible:
-        parent = shared_notes_parent(sources.get(u.name, ""))
-        key = (parent, u.new_pkgver)
-        if not u.flatpak_ref and u.change_type is ChangeType.VERSION and key in parents:
+        source = sources.get(u.name, "")
+        if u.change_type is ChangeType.REBUILD:
+            base = package_bases.get(u.name, "")
+            parent = base if base != u.name and source and source == sources.get(base) else ""
+        else:
+            parent = shared_notes_parent(source)
+        key = _related_key(u, parent)
+        if parent and not u.flatpak_ref and key in parents:
             related[key].append(u)
         else:
             individual.append(u)
 
     def _print_related(u: PackageUpdate) -> None:
-        if not u.flatpak_ref:
-            for companion in related.get((u.name, u.new_pkgver), []):
+        if u.flatpak_ref:
+            return
+        companions = related.get(_related_key(u, u.name), [])
+        if u.change_type is ChangeType.REBUILD:
+            if companions:
+                names = ", ".join(display_name(companion.name, aliases) for companion in companions)
+                console.print(f"   Incluye: {names}", style="dim", markup=False)
+        else:
+            for companion in companions:
                 name = display_name(companion.name, aliases)
                 console.print(f"   [dim]Incluye: {name} {companion.old_pkgver} → {companion.new_pkgver}[/dim]")
 
@@ -177,7 +209,9 @@ def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases
                 _print_related(u)
                 _print_update_detail(u)
             else:  # solo rebuild, pero es "known" o "new" (si no, no llegaría aquí)
-                console.print(f"🟡 {name} (pkgrel {u.old_pkgrel}→{u.new_pkgrel})")
+                version = f" {u.new_pkgver}" if _related_key(u, u.name) in related else ""
+                console.print(f"🟡 {name}{version} (pkgrel {u.old_pkgrel}→{u.new_pkgrel})")
+                _print_related(u)
                 _print_update_detail(u)
     
         for rel in matching_group:
@@ -225,17 +259,20 @@ def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases
             "[dim]Añádelos a packages.yaml para clasificarlos.[/dim]"
         )
 
-    # Paquetes de sistema colapsados: solo rebuild y no conocidos ni nuevos
     hidden = [
         u for u in updates
-        if u.change_type is ChangeType.REBUILD and not u.visible
+        if u.change_type is ChangeType.REBUILD and not u.visible and u.name not in grouped_rebuilds
     ]
-    if hidden:
+    if group_rebuilds or hidden:
         console.print(f"[bold]{'─' * 50}[/bold]")
         console.print("[dim]⚙️  Rebuilds (solo cambia el empaquetado):[/dim]")
-        console.print(
-            "[dim]" + ", ".join(display_name(u.name, aliases) for u in hidden) + "[/dim]"
-        )
+        for group, members in group_rebuilds:
+            sample = members[0]
+            title = GROUP_TITLES.get(group, group)
+            console.print(f"   {title} {sample.new_pkgver} · {len(members)} paquetes (pkgrel {sample.old_pkgrel}→{sample.new_pkgrel})",
+                          style="dim", markup=False)
+        if hidden:
+            console.print("[dim]" + ", ".join(display_name(u.name, aliases) for u in hidden) + "[/dim]")
 
 def render_pending_review(cache: dict[str, dict]) -> None:
     dudosos = {name: info for name, info in cache.items() if info["confidence"] != "high" and info["repo"]}
