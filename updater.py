@@ -21,6 +21,7 @@ MOZILLA_URLS = {
 }
 PLASMA_CHANGELOG = "https://kde.org/announcements/changelogs/plasma/{major}/{old}-{new}/"
 MIN_GROUP_SIZE = 5  # umbral para considerar que es un release real, no casualidad
+PENDING_DETAILS_LIMIT = 3
 EXPLICIT_SOURCE_PREFIXES = (
     "github:", "gitlab:", "gitlab-self:", "link:", "template:", "flatpak:", "shared:", "cachyos-kernel:",
 )
@@ -51,26 +52,28 @@ def summarize_pending_changes(updates: list[PackageUpdate]) -> str:
             return f"{name} ({old} → {new})"
         return f"{name} ({new})" if new else name
 
-    added = []
-    for name in sorted(current.keys() - previous.keys()):
-        update = by_name[name]
-        old, new = update.old_pkgver, update.new_pkgver
-        if not update.flatpak_ref and (update.old_pkgrel != update.new_pkgrel or old == new):
-            old, new = update.old_version, update.new_version
-        added.append(describe(name, old, new))
-
-    changed = [describe(name, previous[name], current[name])
-               for name in sorted(current.keys() & previous.keys()) if current[name] != previous[name]]
-    removed = sorted(previous.keys() - current.keys())
+    added = sorted(current.keys() - previous.keys())
+    changed = sorted(name for name in current.keys() & previous.keys() if current[name] != previous[name])
+    show_details = len(added) + len(changed) <= PENDING_DETAILS_LIMIT
     parts = []
     if added:
         label = "pendiente" if len(added) == 1 else "pendientes"
-        parts.append(f"+{len(added)} {label} · {', '.join(added)}")
+        summary = f"+{len(added)} {label}"
+        if show_details:
+            details = []
+            for name in added:
+                update = by_name[name]
+                old, new = update.old_pkgver, update.new_pkgver
+                if not update.flatpak_ref and (update.old_pkgrel != update.new_pkgrel or old == new):
+                    old, new = update.old_version, update.new_version
+                details.append(describe(name, old, new))
+            summary += " · " + ", ".join(details)
+        parts.append(summary)
     if changed:
-        parts.append(f"{len(changed)} con otra versión disponible · {', '.join(changed)}")
-    if removed:
-        label = "ya no pendiente" if len(removed) == 1 else "ya no pendientes"
-        parts.append(f"{len(removed)} {label} · {', '.join(removed)}")
+        summary = f"{len(changed)} con otra versión disponible"
+        if show_details:
+            summary += " · " + ", ".join(describe(name, previous[name], current[name]) for name in changed)
+        parts.append(summary)
     return "Desde la última consulta: " + " | ".join(parts) if parts else ""
 
 

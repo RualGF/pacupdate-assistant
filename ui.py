@@ -77,10 +77,12 @@ def render(updates: list[PackageUpdate], sources: dict[str, str], group_releases
         console.print(pending_summary, markup=False)
 
     def _print_update_detail(u: PackageUpdate) -> None:
-        if u.category == "system":
+        python_in_development = u.category == "development" and not u.flatpak_ref and u.name.startswith("python-")
+        if u.category == "system" or python_in_development:
             info = pkg_info.get(u.name)
             if info and info.description:
                 console.print(f"   {info.description}", style="dim", markup=False)
+        if u.category == "system":
             return
 
         changelog = resolve_one_changelog(u, sources, cache, token, discovery_errors=discovery_errors, notes_cache=notes_cache)

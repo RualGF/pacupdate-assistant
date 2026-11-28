@@ -138,6 +138,11 @@ development:
   python-yaml: {}
   python-lxml: {}
   python-packaging: {}
+  python-httpx:
+    source: "github:encode/httpx"
+    release_notes:
+      file: CHANGELOG.md
+  python-reportlab: {}
   opencv: {}
   python-jupyter-client: {}
   python-jupyterlab-server: {}

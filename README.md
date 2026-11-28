@@ -22,9 +22,10 @@ solo para subir el límite de la API pública a 5000/hora):
 Si alguna fuente falla, el informe indica cuál y muestra las actualizaciones
 confirmadas de las demás. En ese caso el comando termina con código `1`.
 
-Cuando hay cambios desde la última consulta completa, el informe indica qué
-paquetes entraron o salieron de la lista de pendientes y cuáles ofrecen ahora
-otra versión. La primera consulta completa establece la referencia.
+El informe resume los nuevos pendientes y los paquetes que ofrecen otra versión
+desde la última consulta completa. Si hay hasta tres cambios de este tipo,
+incluye los nombres y las versiones. La referencia se actualiza con la lista
+completa de pendientes en cada consulta completa.
 
 Al buscar notas, el informe distingue una fuente sin identificar, una versión
 localizada sin notas y una consulta incompleta. Las consultas de repositorios
@@ -46,6 +47,8 @@ largas muestra el enlace a la fuente. Si faltara el enlace, muestra un extracto.
   El campo opcional `source` indica de dónde sacar el changelog.
   Los paquetes de `system`, incluidos los que están por clasificar, muestran
   su descripción de pacman. Para ver sus notas, asígnalos a otra categoría.
+  Los paquetes `python-*` de `development` muestran la descripción de pacman
+  antes de las notas de versión.
   - `github:owner/repo`
   - `gitlab:owner/repo`
   - Si la publicación de GitHub o GitLab carece de notas, se buscan archivos
